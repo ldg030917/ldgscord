@@ -155,7 +155,12 @@ router.get('/:id', (req, res) => {
         <button class="btn">로그아웃</button>
         </a>`
     )
-    res.send(html);
+    if (req.session.nickname == req.params.id) {        //로그인 한 사용자의 프로필 페이지일 경우 본인 페이지
+        res.send(html);
+    }
+    else {
+        res.send(`${req.params.id}의 프로필입니다.`)    //다른 사용자의 페이지일 경우 띄워줌
+    }
 })
 
 module.exports = router
