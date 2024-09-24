@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const session = require('express-session');
 var db = require('./lib/db');
 var templates = require('./templates/template');
 const bcrypt = require('bcrypt')
@@ -48,16 +47,22 @@ router.post('/login_process', (req, res) => {       //로그인
             db.query('SELECT password FROM userTable WHERE username = ?', [username], async function(error, results, fields) {
                 // DB에 같은 회원이 있는지 확인
                 if (error) throw error;
-                const isMatch = await bcrypt.compare(password, results[0].password)     //result 그대로 넣지 말기
                 if (results.length > 0){
-                    req.session.is_logined = true;      // 세션 정보 갱신
-                    req.session.nickname = username;
-                    req.session.save(function () {
-                        res.redirect('/');
-                    });
+                    const isMatch = await bcrypt.compare(password, results[0].password)     //result 그대로 넣지 말기
+                    if (isMatch) {
+                        req.session.is_logined = true;      // 세션 정보 갱신
+                        req.session.nickname = username;
+                        req.session.save(function () {
+                            res.redirect('/');
+                        });
+                    }
+                    else {
+                        res.send(`<script type="text/javascript">alert("비밀번호가 틀렸습니다!");
+                        document.location.href="/user/login";</script>`);
+                    }
                 }
                 else {
-                    res.send(`<script type="text/javascript">alert("로그인이 실패하였습니다!");
+                    res.send(`<script type="text/javascript">alert("계정이 존재하지 않습니다!");
                     document.location.href="/user/login";</script>`);
                 }
             })
