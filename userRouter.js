@@ -3,6 +3,7 @@ const router = express.Router();
 const session = require('express-session');
 var db = require('./lib/db');
 var templates = require('./templates/template');
+const bcrypt = require('bcrypt')
 
 
 router.get('/', function (req, res) {
@@ -40,38 +41,47 @@ router.get('/login', (req, res) => {       //로그인 화면
 })
 
 router.post('/login_process', (req, res) => {       //로그인
-    console.log(req.body)
     var username = req.body.uid
     var password = req.body.pw
-    if (username && password){
-        db.query('SELECT * FROM userTable WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-            // DB에 같은 회원이 있는지 확인
-            if (error) throw error;
-            console.log(results)
-            if (results.length > 0){
-                req.session.is_logined = true;      // 세션 정보 갱신
-                req.session.nickname = username;
-                req.session.save(function () {
-                    res.redirect('/');
-                });
-            }
-            else {
-                res.send(`<script type="text/javascript">alert("로그인이 실패하였습니다!");
-                document.location.href="/user/login";</script>`);
-            }
-        })
+    try {
+        if (username && password){
+            db.query('SELECT password FROM userTable WHERE username = ?', [username], async function(error, results, fields) {
+                // DB에 같은 회원이 있는지 확인
+                if (error) throw error;
+                const isMatch = await bcrypt.compare(password, results[0].password)     //result 그대로 넣지 말기
+                if (results.length > 0){
+                    req.session.is_logined = true;      // 세션 정보 갱신
+                    req.session.nickname = username;
+                    req.session.save(function () {
+                        res.redirect('/');
+                    });
+                }
+                else {
+                    res.send(`<script type="text/javascript">alert("로그인이 실패하였습니다!");
+                    document.location.href="/user/login";</script>`);
+                }
+            })
+        }
+        else {
+            res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); 
+            document.location.href="/user/login";</script>`);
+        }
     }
-    else {
-        res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); 
-        document.location.href="/user/login";</script>`);
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error!")
     }
 })
 
 router.get('/logout', (req, res) => {      //로그아웃
-    console.log("YES LOGOUT")
+    //console.log("YES LOGOUT")
     req.session.destroy(function (err) {
         res.redirect('/');
     })
+})
+
+router.delete('/delete', (req, res) => {        //회원 탈퇴
+    
 })
 
 router.get('/register', (req, res) => {       //회원가입 화면
@@ -90,36 +100,44 @@ router.get('/register', (req, res) => {       //회원가입 화면
 })
 
 
-router.post('/register_process', (req, res) => {       //회원가입
+router.post('/register_process', async (req, res) => {       //회원가입
     var username = req.body.uid;
     var password = req.body.pw;
     var password2 = req.body.pw2;
 
-    if (username && password && password2) {
-        db.query(' SELECT * FROM userTable WHERE username = ?', [username], function(error, results, fields) {
-            // DB에 같은 이름의 회원아이디가 있는지 확인
-            if (error) throw error;
-            if (results.length <= 0 && password == password2) {     // DB에 같은 이름의 회원아이디가 없고, 비밀번호가 올바르게 입력된 경우 
-                db.query('INSERT INTO usertable (username, password) VALUES(?,?)', [username, password], function (error, data) {
-                    if (error) throw error2;
-                    res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다!");
-                    document.location.href="/user";</script>`);
-                });
-            }
-            else if (password != password2) {   //비밀번호 일치 X
-                res.send(`<script type="text/javascript">alert("비밀번호가 일치하지 않습니다."); 
-                document.location.href="/user/register";</script>`);
-            }
-            else {  //같은 아이디 존재
-                res.send(`<script type="text/javascript">alert("같은 아이디의 회원이 존재합니다."); 
-                document.location.href="/user/register";</script>`);
-            }
+    try {
+        if (username && password && password2) {
+            var hpassword = await bcrypt.hash(password, 10)
+            console.log(`id:${username}, pw:${password}, hpw:${hpassword}`)
+            db.query(' SELECT * FROM userTable WHERE username = ?', [username], function(error, results, fields) {
+                // DB에 같은 이름의 회원아이디가 있는지 확인
+                if (error) throw error;
+                if (results.length <= 0 && password == password2) {     // DB에 같은 이름의 회원아이디가 없고, 비밀번호가 올바르게 입력된 경우 
+                    db.query('INSERT INTO usertable (username, password) VALUES(?,?)', [username, hpassword], function (error, data) {
+                        if (error) throw error2;
+                        res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다!");
+                        document.location.href="/user";</script>`);
+                    });
+                }
+                else if (password != password2) {   //비밀번호 일치 X
+                    res.send(`<script type="text/javascript">alert("비밀번호가 일치하지 않습니다."); 
+                    document.location.href="/user/register";</script>`);
+                }
+                else {  //같은 아이디 존재
+                    res.send(`<script type="text/javascript">alert("같은 아이디의 회원이 존재합니다."); 
+                    document.location.href="/user/register";</script>`);
+                }
 
-        })
+            })
+        }
+        else {      
+            res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); 
+            document.location.href="/user/register";</script>`);
+        }
     }
-    else {      
-        res.send(`<script type="text/javascript">alert("입력되지 않은 정보가 있습니다."); 
-        document.location.href="/user/register";</script>`);
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error!")
     }
 })
 

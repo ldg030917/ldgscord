@@ -1,6 +1,6 @@
 const express = require('express')
 var session = require('express-session')
-//const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 const cors = require('cors')
 const db = require('./lib/db')
 const templates = require('./templates/template')
@@ -22,6 +22,7 @@ app.use(session({
         maxAge: 60000         // 쿠키의 수명 (밀리초 단위)
     }
 }));
+
 
 app.get('/', function (req, res) {
     var html = templates.HTML('Main',
