@@ -5,19 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <style>
-        ul { list-style-type: none; padding: 0; }
-        li { padding: 8px; margin-bottom: 8px; background-color: #f1f1f1; }
-        input { padding: 8px; width: 300px; }
-        button { padding: 8px; }
+        /* 간단한 스타일 추가 */
+        #chat-container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        #messages li {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        #form {
+            display: flex;
+        }
+        #input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            margin-left: 5px;
+            background-color: #5cb85c;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
     </style>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/chat.js"></script>
 </head>
 <body>
-    <ul id="messages"></ul>
+    <h1>실시간 채팅</h1>
+    <ul id="messages"></ul>     <!-- 메시지를 표시할 리스트 -->
+
     <form id="form" action="">
         <input id="input" autocomplete="off" placeholder="Enter your message here..." />
-        <button onclick="send()">Send</button>
-    </form>    
+        <button type="submit">Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/chat.js"></script>
 </body>
 </html>
