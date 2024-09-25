@@ -150,7 +150,9 @@ router.post('/register_process', async (req, res) => {       //회원가입
 router.get('/:id', (req, res) => {
     var html = templates.HTML('Main', 
         `<h1>환영합니다! ${req.params.id}님</h1>
-        <p>로그아웃하시겠습니까?</p>
+        <a href="/chat">
+        <button class="btn">오픈채팅창</button>
+        </a>        
         <a href="/user/logout">
         <button class="btn">로그아웃</button>
         </a>`

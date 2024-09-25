@@ -1,7 +1,6 @@
 const express = require('express')
 var session = require('express-session')
 const cors = require('cors')
-const db = require('./lib/db')
 const http = require('http')
 const socketIo = require('socket.io');
 const templates = require('./templates/template')
