@@ -7,7 +7,6 @@ const socketIo = require('socket.io');
 const templates = require('./templates/template')
 const bodyParser = require('body-parser')
 const userRouter = require('./userRouter')
-const chatRouter = require('./chat')
 const path = require('path')
 
 const app = express()
@@ -45,6 +44,7 @@ app.use(session({
 // })
 
 app.use(express.static('templates'));
+app.use(express.static('public'))
 
 app.get('/', function (req, res) {
     var html = templates.HTML('Main',
@@ -67,13 +67,25 @@ app.get('/', function (req, res) {
 })
 
 app.use('/user', userRouter);
-app.use('/chat', chatRouter(io))
 
-io.sockets.on('connection', function(socket) {
-    console.log("접속됨");
-    
+app.use(express.static(path.join(__dirname, 'templates')));
+
+app.get('/chat', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
 })
 
-app.listen(port, () => {
+io.on('connection', function(socket) { //왜 안되는거야?
+    console.log("접속됨");
+
+    socket.on('send', function(data) {
+        console.log('전달된 메시지:', data.msg)
+    })
+    
+    socket.on('disconnect', function() {
+        console.log("접속종료")
+    })
+})
+
+server.listen(3000,  () => {
     console.log("start server at port 3000")
 })
