@@ -7,7 +7,7 @@ const templates = require('./templates/template')
 const bodyParser = require('body-parser')
 const userRouter = require('./userRouter')
 const path = require('path')
-
+const db = require('./lib/db')
 const app = express()
 const server = http.createServer(app)
 const io = socketIo(server)
@@ -60,8 +60,25 @@ app.use('/user', userRouter);
 app.use(express.static(path.join(__dirname, 'templates')));
 
 app.get('/chat', (req, res) => {
-    res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+    
+    const uid = req.session.nickname;
+    //현재 세션 유저의 친구 리스트 가져옴
+    const query = `SELECT u.username FROM userTable u JOIN friendships f ON u.username = f.username WHERE f.friend = ?`
+    
+    db.query(query, [uid], (error, result) => {
+        console.log(result)
+        if (error) { 
+            console.log("ERROR!")
+            return res.status(500).send(error);
+        }
+        if (result > 0) {
+            console.log(result)
+            res.json(result)
+        }
+        res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+    })
 })
+
 
 io.on('connection', function(socket) { //왜 안되는거야?
     const session = socket.request.session;     //현재 소켓의 세션 정보 가져오기

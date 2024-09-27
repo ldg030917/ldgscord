@@ -7,7 +7,7 @@
     <style>
         /* 간단한 스타일 추가 */
         #chat-container {
-            width: 400px;
+            width: 75%;
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
@@ -46,16 +46,43 @@
         button:hover {
             background-color: #4cae4c;
         }
+        .friend-list {
+            background-color: rgb(13, 80, 100);
+            width: 150px;
+            list-style-type: none;
+            padding: 0;
+            max-height: 100%;
+            border: 1px solid #000;
+            overflow-y: auto;
+            flex-direction: column; /* 세로 방향으로 배치 */
+        }
+        
+        #friend-list li {
+            width: 50px;
+            height: 50px;
+            background-color: lightblue;
+            border-radius: 50%;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
     <h1>실시간 채팅</h1>
-    <ul id="messages"></ul>     <!-- 메시지를 표시할 리스트 -->
-
-    <form id="form" action="">
-        <input id="input" autocomplete="off" placeholder="Enter your message here..." />
-        <button type="submit">Send</button>
-    </form>
+    <div class="friend-list">
+        <h2>친구 목록</h2>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+        </ul>
+    </div>
+    <div class="chat-container">
+        <ul id="messages"></ul>     <!-- 메시지를 표시할 리스트 -->
+        <form id="form" action="">
+            <input id="input" autocomplete="off" placeholder="Enter your message here..." />
+            <button type="submit">Send</button>
+        </form>
+    </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/chat.js"></script>
 </body>

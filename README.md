@@ -9,3 +9,8 @@ CREATE TABLE userTable (
   password varchar(255) NOT NULL,
   PRIMARY KEY(id)
 ) charset=utf8;
+
+CREATE TABLE friendships (
+    -> username varchar(50) NOT NULL,
+    -> friend varchar(50) NOT NULL
+    -> );
