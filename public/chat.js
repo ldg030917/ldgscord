@@ -1,9 +1,5 @@
 var socket = io()
 
-socket.on('connect', function() {
-        console.log('con')
-})
-
 
 document.getElementById('form').addEventListener('submit', function(e) {        //메시지를 보낼 때
     e.preventDefault(); // 기본 폼 제출 방지
@@ -21,17 +17,3 @@ socket.on('update', function(data) {     //(본인 포함) 유저가 메세지�
     window.scrollTo(0, document.body.scrollHeight)      // 스크롤 하단으로 이동
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 })
-
-fetch('/chat')
-    .then(response => response.json())
-    .then(friends => {
-        console.log("frs", friends)
-        const friendList = document.getElementById('friend-list');
-        friends.forEach(friend => {
-            console.log("fr", friend)
-            const li = document.createElement('li');
-            li.textContent = friend.username;
-            friendList.appendChild(li);
-        });
-    })
-    .catch(error => console.error('Error fetching friends:', error));

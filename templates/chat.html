@@ -56,15 +56,15 @@
             overflow-y: auto;
             flex-direction: column; /* 세로 방향으로 배치 */
         }
-        
-        #friend-list li {
+
+        .circleicon {
             width: 50px;
             height: 50px;
-            background-color: lightblue;
             border-radius: 50%;
+            background-color: #eee;
             padding: 10px;
-            border-bottom: 1px solid #ccc;
         }
+
     </style>
 </head>
 <body>
@@ -72,8 +72,8 @@
     <div class="friend-list">
         <h2>친구 목록</h2>
         <ul>
-            <li>1</li>
-            <li>2</li>
+            <li class="circleicon">1</li>
+            <li class="circleicon">2</li>
         </ul>
     </div>
     <div class="chat-container">

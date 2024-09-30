@@ -11,6 +11,8 @@ const db = require('./lib/db')
 const app = express()
 const server = http.createServer(app)
 const io = socketIo(server)
+const {router: matchRouter, setupSocket} = require('./public/match')
+
 port = 3000
 
 app.use(cors())
@@ -44,6 +46,9 @@ app.get('/', function (req, res) {
         </a>
         <a href="/chat">
         <button class="btn">채팅</button>
+        </a>
+        <a href="/matching">
+        <button class="btn">1대1매칭</button>
         </a>`
     )
     if (req.session.is_logined) {   //로그인 된 상태일 시
@@ -56,8 +61,17 @@ app.get('/', function (req, res) {
 })
 
 app.use('/user', userRouter);
+app.use('/matching', matchRouter);
 
 app.use(express.static(path.join(__dirname, 'templates')));
+
+app.get('/matching', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'match.html'));
+});
+
+app.get('/t/:roomid', (req, res) => {
+    res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+})
 
 app.get('/chat', (req, res) => {
     
@@ -79,7 +93,7 @@ app.get('/chat', (req, res) => {
     })
 })
 
-
+/*
 io.on('connection', function(socket) { //왜 안되는거야?
     const session = socket.request.session;     //현재 소켓의 세션 정보 가져오기
     console.log("user:", session.nickname)   //세션 로그인한 유저 아이디 출력
@@ -100,6 +114,8 @@ io.on('connection', function(socket) { //왜 안되는거야?
         console.log("접속종료")
     })
 })
+*/
+setupSocket(server);
 
 server.listen(3000,  () => {
     console.log("start server at port 3000")

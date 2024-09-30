@@ -1,0 +1,25 @@
+<!-- 클라이언트 HTML 파일 (예: index.html) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matching Page</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Waiting for a match...</h1>
+  <script>
+    const socket = io();
+
+    // 서버에 매칭 요청
+    socket.emit('joinQ');
+
+    // 매칭 완료 후 방으로 리다이렉션
+    socket.on('matched', (roomId) => {
+      console.log(`Matched! Redirecting to room: ${roomId}`);
+      window.location.href = `/t/${roomId}`;  // 방 페이지로 리다이렉션
+    });
+  </script>
+</body>
+</html>
