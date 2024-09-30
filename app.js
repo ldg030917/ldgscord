@@ -1,21 +1,30 @@
 const express = require('express')
+const expressLayouts = require('express-ejs-layouts');
 var session = require('express-session')
-const cors = require('cors')
 const http = require('http')
 const socketIo = require('socket.io');
-const templates = require('./templates/template')
 const bodyParser = require('body-parser')
-const userRouter = require('./userRouter')
 const path = require('path')
-const db = require('./lib/db')
+const userRouter = require('./routers/newuserRouter')
+
+
+//server, io, app 설정
 const app = express()
 const server = http.createServer(app)
 const io = socketIo(server)
-const {router: matchRouter, setupSocket} = require('./public/match')
+
 
 port = 3000
 
-app.use(cors())
+app.set('view engine', 'ejs');      //ejs를 뷰 엔진으로 설정
+app.set('views', __dirname + '/views');     //뷰 파일 위치 설정
+
+app.use(express.static('public'));      //정적 파일 제공
+
+// EJS 레이아웃 미들웨어 설정
+app.use(expressLayouts);
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const sessionMiddleware = session({
@@ -27,95 +36,25 @@ const sessionMiddleware = session({
     }
 })
 
-app.use(sessionMiddleware);
+app.use(sessionMiddleware);     //세션 미들웨어 사용
 
 io.use((socket, next) => {      //소켓과 세션 연동
     sessionMiddleware(socket.request, {}, next)
 })
 
-
-app.use(express.static('templates'));
-app.use(express.static('public'))
-
 app.get('/', function (req, res) {
-    var html = templates.HTML('Main',
-        `<h1>환영합니다!</h1>
-        <p>메인화면입니다.</p>
-        <a href="/user">
-        <button class="btn">사용자</button>
-        </a>
-        <a href="/chat">
-        <button class="btn">채팅</button>
-        </a>
-        <a href="/matching">
-        <button class="btn">1대1매칭</button>
-        </a>`
-    )
-    if (req.session.is_logined) {   //로그인 된 상태일 시
-        var id = req.session.nickname
-        res.redirect(`/user/${id}`)
-    }
-    else {
-        res.send(html);
-    }
+    res.render('index')
 })
 
-app.use('/user', userRouter);
-app.use('/matching', matchRouter);
+app.use('/', userRouter);
 
-app.use(express.static(path.join(__dirname, 'templates')));
 
-app.get('/matching', (req, res) => {
-    res.sendFile(path.join(__dirname, 'templates', 'match.html'));
-});
-
-app.get('/t/:roomid', (req, res) => {
-    res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
+app.get('/channels/@me', (req, res) => {
+    res.render('channel');
 })
 
-app.get('/chat', (req, res) => {
-    
-    const uid = req.session.nickname;
-    //현재 세션 유저의 친구 리스트 가져옴
-    const query = `SELECT u.username FROM userTable u JOIN friendships f ON u.username = f.username WHERE f.friend = ?`
-    
-    db.query(query, [uid], (error, result) => {
-        console.log(result)
-        if (error) { 
-            console.log("ERROR!")
-            return res.status(500).send(error);
-        }
-        if (result > 0) {
-            console.log(result)
-            res.json(result)
-        }
-        res.sendFile(path.join(__dirname, 'templates', 'chat.html'));
-    })
-})
 
-/*
-io.on('connection', function(socket) { //왜 안되는거야?
-    const session = socket.request.session;     //현재 소켓의 세션 정보 가져오기
-    console.log("user:", session.nickname)   //세션 로그인한 유저 아이디 출력
-    console.log("접속됨");
-
-    socket.on('send', function(data) {
-        if (!session.nickname) session.nickname = 'anonymous'
-        console.log('전달된 메시지:', data)
-        console.log('사용자:', session.nickname)
-        io.emit('update', {
-            uid: session.nickname,
-            msg: data
-        })
-        //보낸 메시지 브로드캐스트
-    })
-    
-    socket.on('disconnect', function() {
-        console.log("접속종료")
-    })
-})
-*/
-setupSocket(server);
+//setupSocket(server);
 
 server.listen(3000,  () => {
     console.log("start server at port 3000")

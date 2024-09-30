@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-var db = require('./lib/db');
-var templates = require('./templates/template');
+var db = require('../config/db');
+
 const bcrypt = require('bcrypt')
 
 
