@@ -6,7 +6,9 @@ const socketIo = require('socket.io');
 const bodyParser = require('body-parser')
 const path = require('path')
 const userRouter = require('./routers/newuserRouter')
+const serverRouter = require('./routers/serverRouter')
 
+var db = require('./config/db');
 
 //server, io, app 설정
 const app = express()
@@ -17,7 +19,7 @@ const io = socketIo(server)
 port = 3000
 
 app.set('view engine', 'ejs');      //ejs를 뷰 엔진으로 설정
-app.set('views', __dirname + '/views');     //뷰 파일 위치 설정
+app.set('views', path.join(__dirname, '/views'));     //뷰 파일 위치 설정
 
 app.use(express.static('public'));      //정적 파일 제공
 
@@ -48,13 +50,29 @@ app.get('/', function (req, res) {
 })
 
 app.use('/', userRouter);
+app.use('/channels', serverRouter);
 
 app.get('/channels/@me', (req, res) => {
     res.render('channel');
 })
 
-app.get('/data', (req, res) => {
-    res.send('<div><h2>로딩된 콘텐츠</h2><p>이 내용은 다른 HTML 파일에서 로드되었습니다.</p></div>')
+app.get('/api/servers', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'})
+    }
+    
+    const username = req.session.username;
+    //console.log(username)
+    const query = `SELECT id, servername, participants FROM ServerInfo
+    WHERE JSON_CONTAINS(participants, JSON_QUOTE(?))`;
+
+    db.query(query, [username], (error, results) => {
+        if (error) {
+            return res.status(500).json({error: 'DB Query failed!'})
+        }
+        //console.log(results)
+        res.json(results)
+    })
 })
 
 

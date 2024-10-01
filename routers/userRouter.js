@@ -51,7 +51,7 @@ router.post('/login_process', (req, res) => {       //로그인
                     const isMatch = await bcrypt.compare(password, results[0].password)     //result 그대로 넣지 말기
                     if (isMatch) {
                         req.session.is_logined = true;      // 세션 정보 갱신
-                        req.session.nickname = username;
+                        req.session.id = username;
                         req.session.save(function () {
                             res.redirect('/');
                         });

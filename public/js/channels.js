@@ -3,13 +3,7 @@
 // script.js
 // DOM 요소 가져오기
 const modal = document.getElementById("myModal");
-const openModalButton = document.getElementById("openModalButton");
 const closeModalButton = document.getElementsByClassName("close")[0];
-
-// 모달 열기
-openModalButton.onclick = function() {
-    modal.style.display = "block";
-}
 
 // 모달 닫기
 closeModalButton.onclick = function() {
@@ -26,6 +20,7 @@ window.onclick = function(event) {
 // 행동하기 버튼 클릭 시 처리
 document.getElementById("actionButton").onclick = function() {
     //서버를 만드는 행동 추가
+
     alert("행동이 수행되었습니다!"); // 원하는 행동 추가
 }
 
@@ -40,6 +35,43 @@ dmButton.addEventListener('click', function () {
     //loadContent();
 });
 
+fetch('/api/servers')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('response not OK!')
+        }   
+        return response.json();
+    })
+    .then(servers => {
+        console.log(servers);
+        const channelsDiv = document.getElementById('channels');
+
+        //서버 정보를 div에 추가
+        servers.forEach(server => {
+            const serverBtn = document.createElement('button');
+            serverBtn.textContent = server.servername;
+            serverBtn.className = 'round-button';
+            serverBtn.addEventListener('click', () => {
+                //window.location.href = `/channels/${server.id}`  새로고침하는 방법
+                history.pushState(null, '', `/channels/${server.id}`);
+            })
+
+            channelsDiv.appendChild(serverBtn);
+        });
+
+        const pButton = document.createElement('button')
+        pButton.textContent = '+'
+        pButton.classList = 'round-button'
+        pButton.id = 'openModalButton'
+        pButton.addEventListener('click', () => {       //모달 열기
+            modal.style.display = "block";
+        })
+
+        channelsDiv.appendChild(pButton)
+    })
+    .catch(error => {
+        console.error(error)
+    });
 
 /*
 document.getElementById('channel').addEventListener('click', function() {      //채널 객체 클릭 시
