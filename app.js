@@ -35,7 +35,7 @@ const sessionMiddleware = session({
     resave: false,            // 세션이 수정되지 않아도 다시 저장할지 여부
     saveUninitialized: true,  // 초기화되지 않은 세션도 저장할지 여부
     cookie: { 
-        maxAge: 60000         // 쿠키의 수명 (밀리초 단위)
+        maxAge: 24*60*60*1000        // 쿠키의 수명 (밀리초 단위)
     }
 })
 
