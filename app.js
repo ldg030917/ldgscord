@@ -26,6 +26,7 @@ app.use(expressLayouts);
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const sessionMiddleware = session({
     secret: 'my-secret-key',  // 세션 암호화를 위한 비밀 키
@@ -48,9 +49,12 @@ app.get('/', function (req, res) {
 
 app.use('/', userRouter);
 
-
 app.get('/channels/@me', (req, res) => {
     res.render('channel');
+})
+
+app.get('/data', (req, res) => {
+    res.send('<div><h2>로딩된 콘텐츠</h2><p>이 내용은 다른 HTML 파일에서 로드되었습니다.</p></div>')
 })
 
 

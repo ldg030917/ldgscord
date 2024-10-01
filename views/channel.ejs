@@ -1,9 +1,23 @@
-<% title = 'Home'; %>
-<h2>Welcome to My Application</h2>
-<p>This is the homepage.</p>
-
+<% title = 'LDGsCORD'; %>
 <section>
-    <h2>
-        Channel
-    </h2>
+    <div id="app">
+        <div id="channels">
+            <button id="dmButton" class="round-button">DM</button> 
+            <button id="openModalButton" class="round-button">+</button>
+        </div>
+        <div id="channel-container">
+            <button class="round-button">DM</button> 
+        </div>
+    
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>서버를 만들어보세요</h2>
+                <p>서버는 나와 친구들이 함께 어울리는 공간입니다. 내 서버를 만들고 대화를 시작해보세요.</p>
+                <button id="actionButton" class="rect-button">직접 만들기</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/public/js/channels.js"></script>
 </section>
