@@ -53,7 +53,10 @@ fetch('/api/servers')
             serverBtn.className = 'round-button';
             serverBtn.addEventListener('click', () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
+                
                 history.pushState(null, '', `/channels/${server.id}`);
+
+                loadChannels(server)
             })
 
             channelsDiv.appendChild(serverBtn);
@@ -72,6 +75,34 @@ fetch('/api/servers')
     .catch(error => {
         console.error(error)
     });
+
+async function loadChannels(server) {
+    try {
+        //서버의 채널 가져오기
+        const Chan_res = await fetch(`/api/server/${server.id}`)
+        if (!Chan_res.ok) {
+            throw new Error('채널을 가져오는데 실패했습니다.');
+        }
+        const channels = await Chan_res.json()
+
+        const cont = document.getElementById('chat-container');
+        cont.innerHTML = '';    //로딩 전 기존 버튼 삭제
+
+        channels.forEach(channel => {
+            const chanBtn = document.createElement('button');
+            chanBtn.textContent = channel.name;
+            chanBtn.className = 'chan-btn';
+            chanBtn.addEventListener('click', () => {
+                history.pushState(null, '', `/channels/${server.id}/${channel.id}`)
+            })
+            cont.appendChild(chanBtn)
+
+        });
+    }
+    catch (error) {
+        console.error("ERROR:", error);
+    }
+}
 
 /*
 document.getElementById('channel').addEventListener('click', function() {      //채널 객체 클릭 시

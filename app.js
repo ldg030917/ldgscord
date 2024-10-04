@@ -75,6 +75,21 @@ app.get('/api/servers', (req, res) => {
     })
 })
 
+app.get('/api/server/:id', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'})
+    }
+    const parent_id = req.params.id;
+    console.log('pid', parent_id)
+    const query = `SELECT id, name FROM ChatTable
+    WHERE parent_id = ?`;
+    db.query(query, [parent_id], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        console.log(results)
+        res.json(results)
+    })
+})
+
 
 //setupSocket(server);
 

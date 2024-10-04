@@ -112,8 +112,19 @@ main {
 }
 
 #channel-container {
-    width: 300px;
+    width: 250px;
     height: 100vh;
     background-color: #29292c;
     overflow: auto;
+}
+
+.chan-btn {
+    width: 100%;
+    height: 30px;
+    background-color: #29292c;
+    color: #f4f4f4;
+}
+
+.chan-btn:focus {
+    background-color: #959697;
 }
