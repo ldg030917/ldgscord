@@ -51,12 +51,11 @@ fetch('/api/servers')
             const serverBtn = document.createElement('button');
             serverBtn.textContent = server.servername;
             serverBtn.className = 'round-button';
-            serverBtn.addEventListener('click', () => {
+            serverBtn.addEventListener('click', async () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
-                
-                history.pushState(null, '', `/channels/${server.id}`);
+                let cid = await loadChannels(server)
 
-                loadChannels(server)
+                history.pushState(null, '', `/channels/${server.id}/${cid}`);
             })
 
             channelsDiv.appendChild(serverBtn);
@@ -85,7 +84,7 @@ async function loadChannels(server) {
         }
         const channels = await Chan_res.json()
 
-        const cont = document.getElementById('chat-container');
+        const cont = document.getElementById('channel-index');
         cont.innerHTML = '';    //로딩 전 기존 버튼 삭제
 
         channels.forEach(channel => {
@@ -96,11 +95,15 @@ async function loadChannels(server) {
                 history.pushState(null, '', `/channels/${server.id}/${channel.id}`)
             })
             cont.appendChild(chanBtn)
-
+        
+        
         });
+        //console.log('cid:', channels[0].id)
+        return channels[0].id        //첫번째 채널 id 반환
     }
     catch (error) {
         console.error("ERROR:", error);
+        return null;
     }
 }
 

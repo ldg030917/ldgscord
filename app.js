@@ -4,9 +4,11 @@ var session = require('express-session')
 const http = require('http')
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser')
-const path = require('path')
-const userRouter = require('./routers/newuserRouter')
-const serverRouter = require('./routers/serverRouter')
+const path = require('path');
+const cors = require('cors')
+const userRouter = require('./routers/newuserRouter');
+const serverRouter = require('./routers/serverRouter');
+const setupSocket = require('./routers/socketRouter');
 
 var db = require('./config/db');
 
@@ -15,6 +17,7 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIo(server)
 
+app.use(cors())
 
 port = 3000
 
@@ -52,10 +55,6 @@ app.get('/', function (req, res) {
 app.use('/', userRouter);
 app.use('/channels', serverRouter);
 
-app.get('/channels/@me', (req, res) => {
-    res.render('channel');
-})
-
 app.get('/api/servers', (req, res) => {
     if (!req.session.is_logined) {
         return res.status(401).json({error: '로그인 필요'})
@@ -91,7 +90,7 @@ app.get('/api/server/:id', (req, res) => {
 })
 
 
-//setupSocket(server);
+setupSocket(server);
 
 server.listen(3000,  () => {
     console.log("start server at port 3000")

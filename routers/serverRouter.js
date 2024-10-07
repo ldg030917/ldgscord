@@ -30,6 +30,16 @@ router.post('/create', (req, res) => {
 
 
 router.get('/:id', (req, res) => {
+    if (!req.session.is_logined) {
+        res.redirect('http://localhost:3000/')
+    }
+    res.render('channel')
+})
+
+router.get('/:id/:id2', (req, res) => {
+    if (!req.session.is_logined) {
+        res.redirect('http://localhost:3000/')
+    }
     res.render('channel')
 })
 

@@ -8,9 +8,15 @@
             <div id="server-index">
 
             </div>
-            <div id="chat-container">
+            <div id="channel-index">
                 
             </div>
+        </div>
+        <div id="chat-container">
+            <form id="form" action="">
+                <input id="input" autocomplete="off" required />
+                <button type="submit">전송</button>
+            </form>
         </div>
     
         <div id="myModal" class="modal">
@@ -28,6 +34,7 @@
             </div>
         </div>
     </div>
-    
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/channels.js"></script>
+    <script src="/public/js/chat.js"></script>
 </section>
