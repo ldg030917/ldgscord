@@ -44,6 +44,8 @@ const sessionMiddleware = session({
 
 app.use(sessionMiddleware);     //세션 미들웨어 사용
 
+//io.engine.use(sessionMiddleware);       //소켓과 세션 연동, 좀 더 낮은 레벨에서 미들웨어 적용
+
 io.use((socket, next) => {      //소켓과 세션 연동
     sessionMiddleware(socket.request, {}, next)
 })
@@ -89,8 +91,22 @@ app.get('/api/server/:id', (req, res) => {
     })
 })
 
+app.get('/api/channel/:id', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
+    const channel_id = req.params.id;
+    const query = `SELECT U.username, M.content, M.sent_at FROM Messages M 
+    JOIN UserTable U ON M.user_id = U.id 
+    WHERE M.channel_id = ?`;
+    db.query(query, [channel_id], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        res.json(results);
+    })
+})
 
-setupSocket(server);
+
+setupSocket(io, db);
 
 server.listen(3000,  () => {
     console.log("start server at port 3000")

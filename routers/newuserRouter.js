@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {       //로그인
     var password = req.body.password
     try {
         if (username && password){
-            db.query('SELECT password FROM userTable WHERE username = ?', [username], async function(error, results, fields) {
+            db.query('SELECT id, password FROM userTable WHERE username = ?', [username], async function(error, results, fields) {
                 // DB에 같은 회원이 있는지 확인
                 if (error) throw error;
                 if (results.length > 0){
@@ -23,6 +23,7 @@ router.post('/login', (req, res) => {       //로그인
                     if (isMatch) {
                         req.session.is_logined = true;      // 세션 정보 갱신
                         req.session.username = username;
+                        req.session.uid = results[0].id;
                         req.session.save(function () {
                             res.redirect('/channels/@me');
                         });

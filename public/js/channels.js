@@ -53,9 +53,9 @@ fetch('/api/servers')
             serverBtn.className = 'round-button';
             serverBtn.addEventListener('click', async () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
-                let cid = await loadChannels(server)
-
-                history.pushState(null, '', `/channels/${server.id}/${cid}`);
+                let cid = await loadChannels(server.id);
+                //history.pushState(null, '', `/channels/${server.id}`);
+                document.getElementById(cid).click();       //서버 버튼 입력 시 자동으로 첫 번째 채널 접속 
             })
 
             channelsDiv.appendChild(serverBtn);
@@ -75,10 +75,10 @@ fetch('/api/servers')
         console.error(error)
     });
 
-async function loadChannels(server) {
+async function loadChannels(sid) {       //채널 로드
     try {
         //서버의 채널 가져오기
-        const Chan_res = await fetch(`/api/server/${server.id}`)
+        const Chan_res = await fetch(`/api/server/${sid}`)
         if (!Chan_res.ok) {
             throw new Error('채널을 가져오는데 실패했습니다.');
         }
@@ -90,9 +90,11 @@ async function loadChannels(server) {
         channels.forEach(channel => {
             const chanBtn = document.createElement('button');
             chanBtn.textContent = channel.name;
+            chanBtn.id = channel.id;    //각 버튼마다 채널 id를 적용 => 서버 버튼 누를 시 채널 버튼 자동으로 눌리게 설정
             chanBtn.className = 'chan-btn';
             chanBtn.addEventListener('click', () => {
-                history.pushState(null, '', `/channels/${server.id}/${channel.id}`)
+                history.pushState(null, '', `/channels/${sid}/${channel.id}`)
+                loadChats(channel.id)
             })
             cont.appendChild(chanBtn)
         
@@ -107,6 +109,31 @@ async function loadChannels(server) {
     }
 }
 
+
+async function loadChats(cid) {     //채팅 로드
+    try {
+        //채널의 메시지 가져오기
+        const Chat_res = await fetch(`/api/channel/${cid}`);
+        if (!Chat_res.ok) {
+            throw new Error('채팅을 불러오기 실패!');
+        }
+        const chat = await Chat_res.json()
+
+        const cont = document.getElementById('chat-container');
+        cont.innerHTML = '';
+
+        chat.forEach(msg => {
+            const box = document.createElement('div');
+            box.textContent = `${msg.username}: ${msg.content}   ${msg.sent_at}`;
+            box.className = 'text-box';
+            cont.appendChild(box);
+        })
+    }
+    catch (error) {
+        console.error("ERROR:", error);
+        return null;
+    }
+}
 /*
 document.getElementById('channel').addEventListener('click', function() {      //채널 객체 클릭 시
     console.log('click')
