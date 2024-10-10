@@ -118,6 +118,12 @@ main {
     overflow: auto;
 }
 
+.chancont-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .chan-btn {
     width: 100%;
     height: 30px;
@@ -127,4 +133,16 @@ main {
 
 .chan-btn:focus {
     background-color: #959697;
+}
+
+#togglebtn1 {
+    color: #f4f4f4;
+    margin: 5px;
+}
+
+#ch-create {
+    color: #f4f4f4;
+    float: right;
+    font-size: 20px;
+    margin: 5px;
 }

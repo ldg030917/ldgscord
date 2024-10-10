@@ -2,13 +2,8 @@
 
 // script.js
 // DOM 요소 가져오기
-const modal = document.getElementById("myModal");
+const modal = document.getElementById('myModal')
 const closeModalButton = document.getElementsByClassName("close")[0];
-
-// 모달 닫기
-closeModalButton.onclick = function() {
-    modal.style.display = "none";
-}
 
 // 모달 외부 클릭 시 닫기
 window.onclick = function(event) {
@@ -134,6 +129,43 @@ async function loadChats(cid) {     //채팅 로드
         return null;
     }
 }
+
+document.getElementById('channelform').addEventListener('submit', (event) => {
+    event.preventDefault();     //폼 제출 기본 동작 방지
+
+    const channelname = document.getElementById('channelname').value;
+    //console.log(channelname, window.location.pathname.split('/')[2])
+    urlparts = window.location.pathname.split('/');
+    sid = urlparts[2]
+    cid = urlparts[3]
+
+    fetch('/api/create/channel', {
+        method: 'post',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            channelname: channelname,
+            sid: sid
+        })
+    })
+    .then(response => {
+        if(!response.ok) {
+            throw new Error("network error");
+        }
+        return response.json();
+    })
+    .then(data => {
+        //데이터 받음
+    })
+    .catch(error => {
+        //에러 발생 시
+    });
+    document.getElementById('chModal').style.display = "none";
+    loadChannels(sid)
+    document.getElementById(cid).click()
+})
+
 /*
 document.getElementById('channel').addEventListener('click', function() {      //채널 객체 클릭 시
     console.log('click')

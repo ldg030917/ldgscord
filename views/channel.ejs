@@ -6,17 +6,25 @@
         </div>
         <div id="channel-container">
             <div id="server-index">
-
+                <p>~~~의 서버 어쩌고</p> 
             </div>
-            <div id="channel-index">
+            <div class="channel-index-container">
+                <div class="chancont-header">
+                    <span id="togglebtn1">> 채팅 채널</span>
+                    <span id="ch-create">+</span>
+                </div>
                 
+                <div id="channel-index">
+                    
+                </div>
             </div>
+            
         </div>
         <div>
             <div id="chat-container">
                 
             </div>
-            <form id="form" action="">
+            <form id="form">
                 <input id="input" autocomplete="off" required />
                 <button type="submit">전송</button>
             </form>
@@ -35,8 +43,19 @@
                 </div>
             </div>
         </div>
+        <div id="chModal" class="modal">
+            <div class="modal-content">
+                <span class="close">x</span>
+                <h2>채널 만들기</h2>
+                <form id="channelform">
+                    <input id="channelname" placeholder="새로운 채널" required>
+                    <button class="" type="submit">채널 만들기</button>
+                </form>
+            </div>
+        </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/channels.js"></script>
     <script src="/public/js/chat.js"></script>
+    <script src="/public/js/interaction.js"></script>
 </section>

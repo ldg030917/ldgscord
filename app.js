@@ -9,6 +9,7 @@ const cors = require('cors')
 const userRouter = require('./routers/newuserRouter');
 const serverRouter = require('./routers/serverRouter');
 const setupSocket = require('./routers/socketRouter');
+const createChat = require('./routers/cRouter');
 
 var db = require('./config/db');
 
@@ -54,6 +55,7 @@ app.get('/', function (req, res) {
     res.render('index')
 })
 
+app.use(express.json());
 app.use('/', userRouter);
 app.use('/channels', serverRouter);
 
@@ -105,6 +107,12 @@ app.get('/api/channel/:id', (req, res) => {
     })
 })
 
+app.post('/api/create/channel', (req, res) => {
+    //console.log('채널 생성', req.body)
+    const channelname = req.body.channelname;
+    const server_id = req.body.sid;
+    createChat(server_id, channelname);
+})
 
 setupSocket(io, db);
 
