@@ -46,6 +46,7 @@ fetch('/api/servers')
             const serverBtn = document.createElement('button');
             serverBtn.textContent = server.servername;
             serverBtn.className = 'round-button';
+            serverBtn.id = 'sid' + server.id;
             serverBtn.addEventListener('click', async () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
                 let cid = await loadChannels(server.id);
@@ -70,6 +71,9 @@ fetch('/api/servers')
         console.error(error)
     });
 
+const customMenu = document.getElementById('customMenu')      //채널 우클릭 시 뜰 팝업창
+let selectedId = '';
+
 async function loadChannels(sid) {       //채널 로드
     try {
         //서버의 채널 가져오기
@@ -91,9 +95,14 @@ async function loadChannels(sid) {       //채널 로드
                 history.pushState(null, '', `/channels/${sid}/${channel.id}`)
                 loadChats(channel.id)
             })
-            cont.appendChild(chanBtn)
-        
-        
+            chanBtn.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
+                customMenu.style.display = 'flex';
+                customMenu.style.left = `${event.pageX}px`  //마우스 x 위치
+                customMenu.style.top = `${event.pageY}px`   //마우스 y 위치
+                selectedId = event.target.id;
+            });
+            cont.appendChild(chanBtn)        
         });
         //console.log('cid:', channels[0].id)
         return channels[0].id        //첫번째 채널 id 반환
@@ -104,6 +113,9 @@ async function loadChannels(sid) {       //채널 로드
     }
 }
 
+document.addEventListener('click', () => {
+    customMenu.style.display = 'none';
+})
 
 async function loadChats(cid) {     //채팅 로드
     try {
@@ -181,3 +193,20 @@ document.getElementById('channel').addEventListener('click', function() {      /
         });
 });
 */
+
+document.getElementById('delchan').addEventListener('click', () => {
+    fetch(`/api/delete/${selectedId}`, {
+        method: 'delete'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("오류가 발생했습니다.");
+        }
+        return response.json();
+    })
+    .then(data => {
+
+    })
+    sid = window.location.pathname.split('/')[2];
+    document.getElementById('sid'+sid).click();
+})

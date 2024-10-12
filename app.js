@@ -108,10 +108,24 @@ app.get('/api/channel/:id', (req, res) => {
 })
 
 app.post('/api/create/channel', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
     //console.log('채널 생성', req.body)
     const channelname = req.body.channelname;
     const server_id = req.body.sid;
     createChat(server_id, channelname);
+})
+
+app.delete('/api/delete/:id', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
+    const cid = req.params.id;
+    db.query('DELETE FROM chatTable WHERE id = ?', [cid], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        console.log(`channel deleted!, id: ${cid}`);
+    })
 })
 
 setupSocket(io, db);
