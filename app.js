@@ -7,11 +7,10 @@ const bodyParser = require('body-parser')
 const path = require('path');
 const cors = require('cors')
 const userRouter = require('./routers/newuserRouter');
-const serverRouter = require('./routers/serverRouter');
 const setupSocket = require('./routers/socketRouter');
-const createChat = require('./routers/cRouter');
+const apiRouter = require('./routers/api');
 
-var db = require('./config/db');
+const db = require('./config/db');
 
 //server, io, app 설정
 const app = express()
@@ -57,76 +56,22 @@ app.get('/', function (req, res) {
 
 app.use(express.json());
 app.use('/', userRouter);
-app.use('/channels', serverRouter);
+app.use('/api', apiRouter);
 
-app.get('/api/servers', (req, res) => {
+app.get('/channels/@me', (req, res) => {
     if (!req.session.is_logined) {
-        return res.status(401).json({error: '로그인 필요'})
+        res.redirect('/');
     }
-    
-    const username = req.session.username;
-    //console.log(username)
-    const query = `SELECT id, servername, participants FROM ServerInfo
-    WHERE JSON_CONTAINS(participants, JSON_QUOTE(?))`;
-
-    db.query(query, [username], (error, results) => {
-        if (error) {
-            return res.status(500).json({error: 'DB Query failed!'})
-        }
-        //console.log(results)
-        res.json(results)
-    })
+    else res.render('channel');
 })
 
-app.get('/api/server/:id', (req, res) => {
+app.get('/channels/:id/:id2', (req, res) => {
     if (!req.session.is_logined) {
-        return res.status(401).json({error: '로그인 필요'})
+        res.redirect('/')
     }
-    const parent_id = req.params.id;
-    console.log('pid', parent_id)
-    const query = `SELECT id, name FROM ChatTable
-    WHERE parent_id = ?`;
-    db.query(query, [parent_id], (error, results) => {
-        if (error) return res.status(500).json({error: 'DB Query failed!'});
-        console.log(results)
-        res.json(results)
-    })
+    res.render('channel')
 })
 
-app.get('/api/channel/:id', (req, res) => {
-    if (!req.session.is_logined) {
-        return res.status(401).json({error: '로그인 필요'});
-    }
-    const channel_id = req.params.id;
-    const query = `SELECT U.username, M.content, M.sent_at FROM Messages M 
-    JOIN UserTable U ON M.user_id = U.id 
-    WHERE M.channel_id = ?`;
-    db.query(query, [channel_id], (error, results) => {
-        if (error) return res.status(500).json({error: 'DB Query failed!'});
-        res.json(results);
-    })
-})
-
-app.post('/api/create/channel', (req, res) => {
-    if (!req.session.is_logined) {
-        return res.status(401).json({error: '로그인 필요'});
-    }
-    //console.log('채널 생성', req.body)
-    const channelname = req.body.channelname;
-    const server_id = req.body.sid;
-    createChat(server_id, channelname);
-})
-
-app.delete('/api/delete/:id', (req, res) => {
-    if (!req.session.is_logined) {
-        return res.status(401).json({error: '로그인 필요'});
-    }
-    const cid = req.params.id;
-    db.query('DELETE FROM chatTable WHERE id = ?', [cid], (error, results) => {
-        if (error) return res.status(500).json({error: 'DB Query failed!'});
-        console.log(`channel deleted!, id: ${cid}`);
-    })
-})
 
 setupSocket(io, db);
 

@@ -30,6 +30,11 @@ dmButton.addEventListener('click', function () {
     //loadContent();
 });
 
+
+async function loadServer () {
+
+};
+
 fetch('/api/servers')
     .then(response => {
         if (!response.ok) {
@@ -38,7 +43,7 @@ fetch('/api/servers')
         return response.json();
     })
     .then(servers => {
-        console.log(servers);
+        console.log("servers:", servers);
         const channelsDiv = document.getElementById('channels');
 
         //서버 정보를 div에 추가
@@ -46,7 +51,7 @@ fetch('/api/servers')
             const serverBtn = document.createElement('button');
             serverBtn.textContent = server.servername;
             serverBtn.className = 'round-button';
-            serverBtn.id = 'sid' + server.id;
+            serverBtn.id = server.id;
             serverBtn.addEventListener('click', async () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
                 let cid = await loadChannels(server.id);
@@ -88,7 +93,7 @@ async function loadChannels(sid) {       //채널 로드
 
         channels.forEach(channel => {
             const chanBtn = document.createElement('button');
-            chanBtn.textContent = channel.name;
+            chanBtn.textContent = channel.servername;
             chanBtn.id = channel.id;    //각 버튼마다 채널 id를 적용 => 서버 버튼 누를 시 채널 버튼 자동으로 눌리게 설정
             chanBtn.className = 'chan-btn';
             chanBtn.addEventListener('click', () => {
@@ -131,7 +136,7 @@ async function loadChats(cid) {     //채팅 로드
 
         chat.forEach(msg => {
             const box = document.createElement('div');
-            box.textContent = `${msg.username}: ${msg.content}   ${msg.sent_at}`;
+            box.textContent = `${msg.username}: ${msg.content}   ${msg.sent_at}`;       //cloneNode를 이용하는 방법?
             box.className = 'text-box';
             cont.appendChild(box);
         })
@@ -142,15 +147,41 @@ async function loadChats(cid) {     //채팅 로드
     }
 }
 
+document.getElementById('serverform').addEventListener('submit', (event) => {
+    event.preventDefault();     //폼 제출 기본 동작 방지
+
+    const servername = document.getElementById('servername').value;
+    fetch('/api/create/server', {
+        method: 'post',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            servername: servername
+        })
+    })
+    .then(response => {
+        if(!response.ok) {
+            throw new Error("network error");
+        }
+        return response.json();
+    })
+    .then(data => {
+        sid = data
+        document.getElementById('myModal').style.display = "none";
+        document.getElementById(sid).click()
+    })
+    .catch(error => {
+        //에러 발생 시
+    });
+    
+})
+
 document.getElementById('channelform').addEventListener('submit', (event) => {
     event.preventDefault();     //폼 제출 기본 동작 방지
 
     const channelname = document.getElementById('channelname').value;
-    //console.log(channelname, window.location.pathname.split('/')[2])
-    urlparts = window.location.pathname.split('/');
-    sid = urlparts[2]
-    cid = urlparts[3]
-
+    sid = window.location.pathname.split('/')[2];
     fetch('/api/create/channel', {
         method: 'post',
         headers:{
@@ -169,14 +200,17 @@ document.getElementById('channelform').addEventListener('submit', (event) => {
     })
     .then(data => {
         //데이터 받음
+        document.getElementById('chModal').style.display = "none";
+        loadChannels(sid)
+        document.getElementById(data).click()
     })
     .catch(error => {
         //에러 발생 시
     });
-    document.getElementById('chModal').style.display = "none";
-    loadChannels(sid)
-    document.getElementById(cid).click()
+    
 })
+
+
 
 /*
 document.getElementById('channel').addEventListener('click', function() {      //채널 객체 클릭 시
@@ -208,5 +242,5 @@ document.getElementById('delchan').addEventListener('click', () => {
 
     })
     sid = window.location.pathname.split('/')[2];
-    document.getElementById('sid'+sid).click();
+    document.getElementById(sid).click();
 })

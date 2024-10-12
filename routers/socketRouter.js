@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const socketIo = require('socket.io')
 const moment = require('moment');
 
 function setupSocket(io, db) {

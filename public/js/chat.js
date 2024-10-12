@@ -22,16 +22,6 @@ socket.on('connect', () => {
     console.log('connected to server!');
 });
 
-/*
-socket.on('update', function(data) {     //(본인 포함) 유저가 메세지를 보낸 것을 확인했을 때
-    const li = document.createElement('li');   //리스트 생성
-    const messagesContainer = document.getElementById('chat-container')
-    li.textContent = `${data.uid}: ${data.msg} ${data.date}`    //메시지 내용 추가
-    messagesContainer.appendChild(li);     //리스트에 추가
-    window.scrollTo(0, document.body.scrollHeight)      // 스크롤 하단으로 이동
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-})*/
-
 socket.on('update', (data) => {
     //location.replace(location.href);    //메시지를 업데이트 했다는 신호를 받으면, 업데이트 된 페이지로 현재 페이지를 대체, 원래 목표랑 다른 기능
     loadChats(data.cid);    //그냥 채팅창 새로 로딩ㅋㅋ

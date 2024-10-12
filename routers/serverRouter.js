@@ -1,21 +1,27 @@
 const express = require("express");
 const router = express.Router();
 var db = require('../config/db');
-const createChat = require('./cRouter');
 
-let ch_id = 1
+function createServer(pid, name) {
+    db.query('INSERT INTO serverInfo (servername, parent_id) VALUE (?, ?)', [name, pid], (error, results) => {
+        if (error) console.log('DB Query Failed!');
+        return results.insertID  //삽입된 서버의 id 가져오기
+    })
+}
+
+
 
 router.post('/create', (req, res) => {
-    var servername = req.body.servername
-    var participants = JSON.stringify([req.session.username]);
-    db.query('INSERT INTO ServerInfo (servername, participants) VALUES (?, ?)', [servername, participants], (error, results) => {
-        if (error) {
-            console.log('error:', error)
-        }
-        createChat(results.insertId, '일반')        //기본적인 채팅 채널 추가
-        res.send(`<script type="text/javascript">alert("채널 생성이 완료되었습니다!");
-                document.location.href="/channels/@me";</script>`);
+    var servername = req.body.servername;
+    var uid = req.session.uid;
+    sid = createServer(null, servername);       //부모가 없는
+    db.query('INSERT INTO memberTable (sid, uid) VALUES (?, ?)', [sid, uid], (error, results) => {
+        if (error) console.log('DB Query Failed!');
     })
+    createServer(sid, '일반')        //기본적인 채팅 채널 추가
+
+    res.send(`<script type="text/javascript">alert("채널 생성이 완료되었습니다!");
+            document.location.href="/channels/@me";</script>`);
 })
 
 
