@@ -29,14 +29,14 @@ router.get('/:id', (req, res) => {
     if (!req.session.is_logined) {
         res.redirect('http://localhost:3000/')
     }
-    res.render('channel')
+    res.render('channel', {layout: 'layouts/layout1'})
 })
 
 router.get('/:id/:id2', (req, res) => {
     if (!req.session.is_logined) {
         res.redirect('http://localhost:3000/')
     }
-    res.render('channel')
+    res.render('channel', {layout: 'layouts/layout1'})
 })
 
 module.exports = router

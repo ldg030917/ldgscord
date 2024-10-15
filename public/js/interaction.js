@@ -28,3 +28,25 @@ for (let i = 0; i < elements.length; i++) {
         modal.style.display = "none";
     })
 }
+
+// 행동하기 버튼 클릭 시 처리
+document.getElementById("actionButton").onclick = function() {
+    //서버를 만드는 행동 추가
+
+    alert("행동이 수행되었습니다!"); // 원하는 행동 추가
+}
+
+const dmButton = document.getElementById("dmButton");
+
+dmButton.addEventListener('click', function () {
+    //주소 변경
+    history.pushState(null, '', '/channels/@me');
+
+    //컨텐츠 로드
+    //loadContent();
+});
+
+
+document.getElementById('openModalButton').addEventListener('click', () => {       //모달 열기
+    modal.style.display = "block";
+})

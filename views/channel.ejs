@@ -3,10 +3,12 @@
     <div id="app">
         <div id="channels">
             <button id="dmButton" class="round-button">DM</button>
+            <div id="channelsDiv"></div>
+            <button id="openModalButton" class="round-button">+</button>
         </div>
         <div id="channel-container">
             <div id="server-index">
-                <p>~~~의 서버 어쩌고</p> 
+                <p>~~~의 서버 어쩌고</p>
             </div>
             <div class="channel-index-container">
                 <div class="chancont-header">
@@ -55,7 +57,7 @@
             </div>
         </div>
         <div id="customMenu">
-            <div class="cmbtn">
+            <div id="invchan" class="cmbtn">
                 초대하기
             </div>
             <div class="cmbtn">
@@ -66,8 +68,8 @@
             </div>
         </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/channels.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/chat.js"></script>
     <script src="/public/js/interaction.js"></script>
 </section>

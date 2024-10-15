@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 
 
 router.get('/login', (req, res) => {        //로그인 화면
-    res.render('login')
+    res.render('login', {layout: 'layouts/layout2'})
 })
 
 

@@ -12,39 +12,17 @@ window.onclick = function(event) {
     }
 }
 
-// 행동하기 버튼 클릭 시 처리
-document.getElementById("actionButton").onclick = function() {
-    //서버를 만드는 행동 추가
-
-    alert("행동이 수행되었습니다!"); // 원하는 행동 추가
-}
-
-
-const dmButton = document.getElementById("dmButton");
-
-dmButton.addEventListener('click', function () {
-    //주소 변경
-    history.pushState(null, '', '/channels/@me');
-
-    //컨텐츠 로드
-    //loadContent();
-});
-
-
 async function loadServer () {
+    try {
+        const servers_res = await fetch('/api/servers');
+        if (!servers_res.ok) {
+            throw new Error('response not OK!');
+        }
+        const servers = await servers_res.json()
 
-};
-
-fetch('/api/servers')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('response not OK!')
-        }   
-        return response.json();
-    })
-    .then(servers => {
         console.log("servers:", servers);
-        const channelsDiv = document.getElementById('channels');
+        const channelsDiv = document.getElementById('channelsDiv');
+        channelsDiv.innerHTML = ''
 
         //서버 정보를 div에 추가
         servers.forEach(server => {
@@ -57,24 +35,18 @@ fetch('/api/servers')
                 let cid = await loadChannels(server.id);
                 //history.pushState(null, '', `/channels/${server.id}`);
                 document.getElementById(cid).click();       //서버 버튼 입력 시 자동으로 첫 번째 채널 접속 
+                console.log('s click:', serverBtn.id)
             })
 
             channelsDiv.appendChild(serverBtn);
         });
-
-        const pButton = document.createElement('button')
-        pButton.textContent = '+'
-        pButton.classList = 'round-button'
-        pButton.id = 'openModalButton'
-        pButton.addEventListener('click', () => {       //모달 열기
-            modal.style.display = "block";
-        })
-
-        channelsDiv.appendChild(pButton)
-    })
-    .catch(error => {
+    }
+    catch (error) {
         console.error(error)
-    });
+    }
+};
+
+loadServer();
 
 const customMenu = document.getElementById('customMenu')      //채널 우클릭 시 뜰 팝업창
 let selectedId = '';
@@ -97,6 +69,7 @@ async function loadChannels(sid) {       //채널 로드
             chanBtn.id = channel.id;    //각 버튼마다 채널 id를 적용 => 서버 버튼 누를 시 채널 버튼 자동으로 눌리게 설정
             chanBtn.className = 'chan-btn';
             chanBtn.addEventListener('click', () => {
+                console.log('c click');
                 history.pushState(null, '', `/channels/${sid}/${channel.id}`)
                 loadChats(channel.id)
             })
@@ -149,7 +122,7 @@ async function loadChats(cid) {     //채팅 로드
 
 document.getElementById('serverform').addEventListener('submit', (event) => {
     event.preventDefault();     //폼 제출 기본 동작 방지
-
+    let sid;
     const servername = document.getElementById('servername').value;
     fetch('/api/create/server', {
         method: 'post',
@@ -169,19 +142,21 @@ document.getElementById('serverform').addEventListener('submit', (event) => {
     .then(data => {
         sid = data
         document.getElementById('myModal').style.display = "none";
-        document.getElementById(sid).click()
+        loadServer().then(() => {
+            document.getElementById(sid).click()
+        })
     })
     .catch(error => {
         //에러 발생 시
     });
-    
 })
 
 document.getElementById('channelform').addEventListener('submit', (event) => {
     event.preventDefault();     //폼 제출 기본 동작 방지
 
     const channelname = document.getElementById('channelname').value;
-    sid = window.location.pathname.split('/')[2];
+    let sid = window.location.pathname.split('/')[2];
+    let cid;
     fetch('/api/create/channel', {
         method: 'post',
         headers:{
@@ -200,9 +175,11 @@ document.getElementById('channelform').addEventListener('submit', (event) => {
     })
     .then(data => {
         //데이터 받음
+        cid = data
         document.getElementById('chModal').style.display = "none";
-        loadChannels(sid)
-        document.getElementById(data).click()
+        loadChannels(sid).then(() =>{
+            document.getElementById(cid).click()
+        })
     })
     .catch(error => {
         //에러 발생 시
@@ -227,6 +204,12 @@ document.getElementById('channel').addEventListener('click', function() {      /
         });
 });
 */
+document.getElementById('invchan').addEventListener('click', () => {    //채널 초대 링크 보내기
+    fetch(`/api/invite/${selectedId}`, {    //디스코드의 경우, discord.gg/[hash] => discord.com/invite/[hash] => discord.com/app/invite-~~~어쩌고/[hash]
+        method: 'post'
+    })
+    .then(response => {})
+})
 
 document.getElementById('delchan').addEventListener('click', () => {
     fetch(`/api/delete/${selectedId}`, {

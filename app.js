@@ -21,7 +21,7 @@ app.use(cors())
 
 port = 3000
 
-app.set('view engine', 'ejs');      //ejs를 뷰 엔진으로 설정
+app.set('view engine', 'ejs');      //ejs를 뷰 엔진으로 
 app.set('views', path.join(__dirname, '/views'));     //뷰 파일 위치 설정
 
 app.use(express.static('public'));      //정적 파일 제공
@@ -44,14 +44,13 @@ const sessionMiddleware = session({
 
 app.use(sessionMiddleware);     //세션 미들웨어 사용
 
-//io.engine.use(sessionMiddleware);       //소켓과 세션 연동, 좀 더 낮은 레벨에서 미들웨어 적용
 
 io.use((socket, next) => {      //소켓과 세션 연동
     sessionMiddleware(socket.request, {}, next)
 })
 
 app.get('/', function (req, res) {
-    res.render('index')
+    res.render('index', {layout: 'layouts/layout2'})
 })
 
 app.use(express.json());
@@ -62,14 +61,14 @@ app.get('/channels/@me', (req, res) => {
     if (!req.session.is_logined) {
         res.redirect('/');
     }
-    else res.render('channel');
+    else res.render('channel', {layout: 'layouts/layout1'});
 })
 
 app.get('/channels/:id/:id2', (req, res) => {
     if (!req.session.is_logined) {
         res.redirect('/')
     }
-    res.render('channel')
+    res.render('channel', {layout: 'layouts/layout1'})
 })
 
 
