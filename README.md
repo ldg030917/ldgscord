@@ -1,2 +1,2 @@
-# Backend-practice 2
-디스코드 형식으로 웹페이지 제작
+# Backend-project
+디스코드의 기능을 웹으로 구현하는 프로젝트
