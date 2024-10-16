@@ -35,13 +35,35 @@ document.getElementById("actionButton").onclick = function() {
 
     alert("행동이 수행되었습니다!"); // 원하는 행동 추가
 }
+/**state 값이 1이면 dm-state, 0이면 server-state로 바꿔주는 함수 */
+function changeState(state) {
+    const dmstate = document.querySelectorAll('.dm-state');
+    const serverstate = document.querySelectorAll('.server-state');
+    if (state){
+        dmstate.forEach(elt => {
+            elt.style.display = 'block';
+        })
+        serverstate.forEach(elt => {
+            elt.style.display = 'none';
+        })
+    }
+    else {
+        dmstate.forEach(elt => {
+            elt.style.display = 'none';
+        })
+        serverstate.forEach(elt => {
+            elt.style.display = 'block';
+        })
+    }
+    
+}
 
 const dmButton = document.getElementById("dmButton");
 
 dmButton.addEventListener('click', function () {
     //주소 변경
     history.pushState(null, '', '/channels/@me');
-
+    changeState(1)
     //컨텐츠 로드
     //loadContent();
 });

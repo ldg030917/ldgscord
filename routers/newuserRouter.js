@@ -51,7 +51,7 @@ router.post('/login', (req, res) => {       //로그인
 })
 
 router.get('/register', (req, res) => {
-    res.render('register')
+    res.render('register', {layout: 'layouts/layout2'})
 })
 
 router.post('/register', async (req, res) => {
@@ -85,6 +85,25 @@ router.post('/register', async (req, res) => {
         res.send(`<script type="text/javascript">alert("비밀번호가 일치하지 않습니다."); 
         document.location.href="/register";</script>`);
     }
+})
+
+router.get('/invite/:encodedpath', (req, res) => {
+    if (!req.session.is_logined) {
+        res.send(`<script type="text/javascript">alert("로그인을 해주세요!"); 
+        document.location.href="/";</script>`);
+    }
+    const path = atob(req.params.encodedpath);
+    const sid = path.split('/')[2];
+    const uid = req.session.uid;
+    db.query('SELECT * FROM memberTable WHERE uid = ? AND sid = ?', [uid, sid], (error, results) => {
+        if (error) throw error;
+        if (results.length <= 0) {
+            db.query('INSERT INTO memberTable (uid, sid) VALUES(?, ?)', [uid, sid], (error, results) => {
+                if (error) throw error2;
+            })
+        }
+    })
+    res.redirect(path);
 })
 
 module.exports = router

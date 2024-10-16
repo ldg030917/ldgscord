@@ -33,9 +33,9 @@ async function loadServer () {
             serverBtn.addEventListener('click', async () => {
                 //window.location.href = `/channels/${server.id}`  새로고침하는 방법
                 let cid = await loadChannels(server.id);
-                //history.pushState(null, '', `/channels/${server.id}`);
-                document.getElementById(cid).click();       //서버 버튼 입력 시 자동으로 첫 번째 채널 접속 
-                console.log('s click:', serverBtn.id)
+                document.getElementById(cid).click();       //서버 버튼 입력 시 자동으로 첫 번째 채널 접속
+                changeState(0);
+                //console.log('s click:', serverBtn.id)
             })
 
             channelsDiv.appendChild(serverBtn);
@@ -70,8 +70,9 @@ async function loadChannels(sid) {       //채널 로드
             chanBtn.className = 'chan-btn';
             chanBtn.addEventListener('click', () => {
                 console.log('c click');
-                history.pushState(null, '', `/channels/${sid}/${channel.id}`)
-                loadChats(channel.id)
+                history.pushState(null, '', `/channels/${sid}/${channel.id}`);
+                loadChats(channel.id);
+                document.getElementById('channel-name-header').textContent = chanBtn.textContent;
             })
             chanBtn.addEventListener('contextmenu', (event) => {
                 event.preventDefault();
@@ -205,10 +206,17 @@ document.getElementById('channel').addEventListener('click', function() {      /
 });
 */
 document.getElementById('invchan').addEventListener('click', () => {    //채널 초대 링크 보내기
-    fetch(`/api/invite/${selectedId}`, {    //디스코드의 경우, discord.gg/[hash] => discord.com/invite/[hash] => discord.com/app/invite-~~~어쩌고/[hash]
-        method: 'post'
-    })
-    .then(response => {})
+    //디스코드의 경우, discord.gg/[hash] => discord.com/invite/[hash] => discord.com/app/invite-~~~어쩌고/[hash]
+    origin = window.location.origin;
+    path = window.location.pathname;
+    const encodedpath = btoa(path);   //문자열을 base64로 인코딩
+    link = `${origin}/invite/${encodedpath}`
+
+    navigator.clipboard.writeText(link)
+        .then(() => {
+            alert('초대 링크가 복사되었습니다!');
+            console.log('copied');
+        });
 })
 
 document.getElementById('delchan').addEventListener('click', () => {
