@@ -63,6 +63,21 @@ afb.addEventListener('click', async () => {
         return response.json();
     })
     .then(response => {
-        
+
     });
+})
+
+const pbtn = document.getElementById("pending");
+
+pbtn.addEventListener('click', () => {
+    fetch('/api/friend_req')
+    .then(res => {
+        if(!res.ok) throw new Error('Response not ok!');
+        return res.json();
+    })
+    .then(res => {
+        res.forEach(request => {
+            request.sender_id
+        })
+    })
 })
