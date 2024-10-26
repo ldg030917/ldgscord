@@ -18,6 +18,24 @@ document.getElementById('form').addEventListener('submit', function(e) {        
     input.value = ''
 })
 
+document.getElementById('input').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // 기본 줄바꿈 방지
+        const input = this.value.trim();
+        if (input !== '')   {
+            document.getElementById('form').dispatchEvent(new Event('submit')); // 폼 제출
+        }
+    }
+});
+
+const textarea = document.getElementById('input');
+
+// 입력할 때마다 높이를 자동으로 조정
+textarea.addEventListener('input', function() {
+    this.style.height = 'auto'; // 높이를 초기화
+    this.style.height = this.scrollHeight + 'px'; // 현재 내용의 높이에 맞게 설정
+});
+
 socket.on('connect', () => {
     console.log('connected to server!');
 });

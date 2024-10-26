@@ -98,4 +98,62 @@ router.delete('/delete/:id', (req, res) => {
     })
 })
 
+router.get('/friend', (req, res) => {
+    if(!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
+    const uid = req.session.uid;
+    query = `SELECT 
+        CASE 
+            WHEN f.uid1 = ? THEN u2.id 
+            ELSE u1.id 
+        END AS fid,
+        CASE
+            WHEN f.uid1 = ? THEN u2.username
+            ELSE u1.username
+        END AS fname
+    FROM friendship f 
+    JOIN userTable u1 ON f.uid1 = u1.id
+    JOIN userTable u2 on f.uid2 = u2.id 
+    WHERE f.uid1 = ? or f.uid2 = ?`
+    db.query(query, [uid, uid, uid, uid], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        res.json(results);
+    })
+})
+
+router.get('/friend_req', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
+    const receiver_id = res.session.uid;
+    query = `SELECT sender_id FROM friend_req WHERE receiver_id = ? and status = 'pending'`;
+    db.query(query, [receiver_id], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        return res.json(results);
+    })
+})
+
+router.post('/friend_req', (req, res) => {
+    if (!req.session.is_logined) {
+        return res.status(401).json({error: '로그인 필요'});
+    }
+    const sender_id = req.session.uid;
+    const receiver_id = req.body.receiver_id;
+
+    query1 = `SELECT * FROM userTable WHERE id = ?`;
+    query2 = `INSERT INTO friend_req (sender_id, receiver_id) VALUE (?, ?)`;
+    db.query(query1, [receiver_id], (error, results) => {
+        if (error) return res.status(500).json({error: 'DB Query failed!'});
+        if (results.length > 0) {
+            db.query(query2, [sender_id, receiver_id], (error, results) => {
+                if (error) return res.status(500).json({error: 'DB Query failed!'});
+            })
+        }
+        else {
+            return res.json('');    //없을 시 없다고 반환?
+        }
+    })
+})
+
 module.exports = router

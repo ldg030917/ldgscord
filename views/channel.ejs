@@ -27,9 +27,9 @@
                     대화 찾기 또는 시작하기
                 </div>
                 <div>
-                    친구
+                    <button>친구</button>
                 </div>
-                <div>
+                <div id="friendlist">
                     친구 리스트 있을 위치
                 </div>
             </div>
@@ -37,23 +37,38 @@
         <div id="main-cont3">
             <div id="chat-header">
                 <div class="server-state">
-                    <a>#</a>
                     <a id="channel-name-header"></a>
                     <span>
 
                     </span>
                 </div>
-                <div class="dm-state">친구</div>
+                <div class="dm-state">
+                    <a>친구</a>
+                    <button data-info="online" class="dmBtn">온라인</button>
+                    <button id="pending" data-info="pending" class="dmBtn">대기 중</button>
+                    <button data-info="addfriend" class="dmBtn">친구 추가하기</button>
+                </div>
             </div>      <!--채널 이름 담을 헤더-->
             <div id="main-cont3-body">
                 <div class="server-state">
                     <div id="chat-container"></div>
-                    <form id="form">
-                        <input id="input" autocomplete="off" required />
-                        <button type="submit">전송</button>
+                    <form id="form" class="chatbox">
+                        <textarea id="input" class="chatinput" rows="1" autocomplete="off" required></textarea>
+                        <button type="submit" class="invBtn"></button>
                     </form>
                 </div>
                 <div class="dm-state">
+                    <div data-info="online" class="content1"></div>
+                    <div data-info="pending" class="content1">
+                        <p>대기 중인 사람들</p>
+                        <div id="pending-list"></div>
+                    </div>
+                    <div data-info="addfriend" class="content1">
+                        <div class="friend-request-container">
+                            <input id="addfriendinput" type="text" placeholder="사용자 id 번호를 사용하여 친구를 추가할 수 있어요." />
+                            <button id="addfriendBtn">친구 요청 보내기</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,6 +109,7 @@
         </div>
     </div>
     <script src="/public/js/channels.js"></script>
+    <script src="/public/js/me.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/chat.js"></script>
     <script src="/public/js/interaction.js"></script>
