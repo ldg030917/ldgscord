@@ -45,8 +45,9 @@ const afb = document.getElementById('addfriendBtn');
 
 afb.addEventListener('click', async () => {
     const receiver_id = afi.value.trim();
+    afi.value = '';
 
-    if (id === '') return;
+    if (receiver_id === '') return;
     fetch('/api/friend_req', {
         method: 'POST',
         headers:{
@@ -58,26 +59,37 @@ afb.addEventListener('click', async () => {
     })
     .then(response => {
         if(!response.ok) {
+            console.log(response);
             throw new Error('Response not ok!');
         }
         return response.json();
     })
     .then(response => {
 
+        console.log(response);
+        alert('친구 요청이 전송되었습니다.');
     });
+    console.log("Y");
 })
 
 const pbtn = document.getElementById("pending");
+const AcceptfriendreqBtn = document.getElementById("AcceptfriendreqBtn");
+const pendinglist = document.getElementById("pending-list");
 
 pbtn.addEventListener('click', () => {
     fetch('/api/friend_req')
     .then(res => {
-        if(!res.ok) throw new Error('Response not ok!');
+        if(!res.ok) {
+            console.log(res);
+            throw new Error('Response not ok!');
+        }
         return res.json();
     })
-    .then(res => {
-        res.forEach(request => {
-            request.sender_id
+    .then(requests => {
+        requests.forEach(request => {
+            let clone = AcceptfriendreqBtn.cloneNode(true);
+            clone.children[0].textContent = request.sender_id;
+            pendinglist.appendChild(clone);           
         })
     })
 })

@@ -126,7 +126,7 @@ router.get('/friend_req', (req, res) => {
     if (!req.session.is_logined) {
         return res.status(401).json({error: '로그인 필요'});
     }
-    const receiver_id = res.session.uid;
+    const receiver_id = req.session.uid;
     query = `SELECT sender_id FROM friend_req WHERE receiver_id = ? and status = 'pending'`;
     db.query(query, [receiver_id], (error, results) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});
@@ -141,7 +141,8 @@ router.post('/friend_req', (req, res) => {
     const sender_id = req.session.uid;
     const receiver_id = req.body.receiver_id;
 
-    query1 = `SELECT * FROM userTable WHERE id = ?`;
+    query1 = `SELECT u.* FROM userTable u
+    WHERE u.id = ?`;
     query2 = `INSERT INTO friend_req (sender_id, receiver_id) VALUE (?, ?)`;
     db.query(query1, [receiver_id], (error, results) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});

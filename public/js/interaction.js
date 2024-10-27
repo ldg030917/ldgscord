@@ -58,6 +58,8 @@ function changeState(state) {
     
 }
 
+changeState(1);
+
 const dmButton = document.getElementById("dmButton");
 
 dmButton.addEventListener('click', function () {
