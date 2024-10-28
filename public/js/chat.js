@@ -16,6 +16,7 @@ document.getElementById('form').addEventListener('submit', function(e) {        
         msg: input.value
     });
     input.value = ''
+    input.style.height = 'auto';
 })
 
 document.getElementById('input').addEventListener('keydown', function(event) {

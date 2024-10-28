@@ -32,10 +32,17 @@ main {
     width: 70px;
     height: 100vh;
     background-color: #171718;
-    overflow: auto;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#main-cont1::-webkit-scrollbar { 
+    display: none; 
 }
 
 .round-button {
+    flex: none;
     width: 50px;
     height: 50px;
     border-radius: 50%;
