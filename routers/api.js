@@ -105,17 +105,17 @@ router.get('/friend', (req, res) => {
     const uid = req.session.uid;
     query = `SELECT 
         CASE 
-            WHEN f.uid1 = ? THEN u2.id 
+            WHEN fr.sender_id = ? THEN u2.id 
             ELSE u1.id 
         END AS fid,
         CASE
-            WHEN f.uid1 = ? THEN u2.username
+            WHEN fr.sender_id = ? THEN u2.username
             ELSE u1.username
         END AS fname
-    FROM friendship f 
-    JOIN userTable u1 ON f.uid1 = u1.id
-    JOIN userTable u2 on f.uid2 = u2.id 
-    WHERE f.uid1 = ? or f.uid2 = ?`
+    FROM friend_req fr
+    JOIN userTable u1 ON fr.sender_id = u1.id
+    JOIN userTable u2 on fr.receiver_id = u2.id
+    WHERE (fr.sender_id = ? or fr.receiver_id = ?) and fr.status = 'accepted'`
     db.query(query, [uid, uid, uid, uid], (error, results) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});
         res.json(results);
@@ -127,7 +127,10 @@ router.get('/friend_req', (req, res) => {
         return res.status(401).json({error: '로그인 필요'});
     }
     const receiver_id = req.session.uid;
-    query = `SELECT sender_id FROM friend_req WHERE receiver_id = ? and status = 'pending'`;
+    query = `SELECT u.id, u.username 
+    FROM friend_req fr
+    JOIN userTable u ON u.id = fr.sender_id
+    WHERE receiver_id = ? and status = 'pending'`;
     db.query(query, [receiver_id], (error, results) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});
         return res.json(results);
@@ -154,6 +157,21 @@ router.post('/friend_req', (req, res) => {
         else {
             return res.json('');    //없을 시 없다고 반환?
         }
+    })
+})
+
+router.patch('/friend_req', (req, res) => {
+    const sender_id = req.body.sender_id;
+    const receiver_id = req.session.uid;
+    let isaccept = req.body.isaccept;
+    let status = 'accepted';
+    if (!isaccept) status = 'rejected';
+
+    query = `UPDATE friend_req
+    SET status = ?
+    WHERE sender_id = ? AND receiver_id = ?`;
+    db.query(query, [status, sender_id, receiver_id], (error) => {
+        if(error) return res.status(500).json({error: 'DB Query failed!'});
     })
 })
 

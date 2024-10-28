@@ -73,10 +73,11 @@ afb.addEventListener('click', async () => {
 })
 
 const pbtn = document.getElementById("pending");
-const AcceptfriendreqBtn = document.getElementById("AcceptfriendreqBtn");
+const AcceptfriendreqBtn = document.querySelector(".AcceptfriendreqBtn");
 const pendinglist = document.getElementById("pending-list");
 
 pbtn.addEventListener('click', () => {
+    pendinglist.innerHTML = '';
     fetch('/api/friend_req')
     .then(res => {
         if(!res.ok) {
@@ -88,8 +89,33 @@ pbtn.addEventListener('click', () => {
     .then(requests => {
         requests.forEach(request => {
             let clone = AcceptfriendreqBtn.cloneNode(true);
-            clone.children[0].textContent = request.sender_id;
-            pendinglist.appendChild(clone);           
+            clone.children[0].textContent = request.username;
+            clone.children[1].addEventListener("click", () => {
+                ReactionbyRequest(1, request.id);
+                clone.style.display = "none";
+                loadfriends();
+            });
+            clone.children[2].addEventListener("click", () => {
+                ReactionbyRequest(0, request.id);
+                clone.style.display = "none";
+                loadfriends();
+            });
+            clone.style.display = "flex";
+            pendinglist.appendChild(clone);
         })
     })
 })
+
+function ReactionbyRequest(isaccept, sender_id) {
+    fetch('/api/friend_req', {
+        method: 'PATCH',
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            isaccept: isaccept,
+            sender_id: sender_id
+        })
+    })
+}
+
