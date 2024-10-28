@@ -184,7 +184,7 @@ main {
 .customMenu {
     display: none;
     flex-direction: column;
-    color: #b4b4b4;
+    color: #f4f4f4;
     position: absolute;
     height: auto;
     width: auto;
@@ -210,7 +210,7 @@ main {
     justify-content: flex-end;
 }
 .cmbtn:hover {
-    background-color: #4b70bb;
+    background-color: #3874f5;
 }
 
 .server-state, .dm-state {
@@ -347,5 +347,5 @@ main {
 }
 
 #channelMenu {
-    width: 200px;
+    width: 150px;
 }
