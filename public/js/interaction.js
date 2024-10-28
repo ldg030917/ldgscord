@@ -1,18 +1,3 @@
-const togglebtn = document.getElementById('togglebtn1');
-
-let o = 0;
-togglebtn.addEventListener('click', () => {
-    if (!o) {
-        togglebtn.textContent = "v 채팅 채널"
-        o = 1;
-    }
-    else {
-        togglebtn.textContent = "> 채팅 채널"
-        o = 0;
-    }
-    
-})
-
 const createbtn = document.getElementById('ch-create');
 
 createbtn.addEventListener('click', () => {
@@ -74,3 +59,31 @@ dmButton.addEventListener('click', function () {
 document.getElementById('openModalButton').addEventListener('click', () => {       //모달 열기
     modal.style.display = "block";
 })
+
+let icons = ['fa-solid fa-xmark'];
+document.getElementById('server-header').addEventListener("click", (e) => {
+    let icon = document.getElementById('server-header').querySelector('i');
+    icons.push(icon.className);
+    icon.className = icons.shift();
+    const menu = document.getElementById('serverMenu');
+    const btnp = document.getElementById('server-header').getBoundingClientRect();
+    menu.style.display = "block";
+    menu.style.top = `${btnp.bottom + 5}px`;
+    menu.style.left = `${btnp.left + (btnp.width - menu.offsetWidth)/2}px`;
+    menu.style.display = "none";
+    if (icon.className == 'fa-solid fa-xmark') {
+        menu.style.display = "flex";
+        console.log("YYY", menu.style.display)
+    }
+    else {
+        menu.style.display = "none";
+    }
+});
+
+let icons2 = ['fa-solid fa-angle-down']
+const togglebtn = document.getElementById('togglebtn1');
+togglebtn.addEventListener("click", () => {
+    let icon = togglebtn.querySelector('i');
+    icons2.push(icon.className);
+    icon.className = icons2.shift();
+});

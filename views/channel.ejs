@@ -2,19 +2,27 @@
 <section>
     <div id="app">
         <div id="main-cont1">
-            <button id="dmButton" class="round-button">DM</button>
+            <button id="dmButton" class="round-button">
+                <i class="fa-brands fa-discord"></i>
+            </button>
             <div id="channelsDiv"></div>
-            <button id="openModalButton" class="round-button">+</button>
+            <button id="openModalButton" class="round-button">
+                <i class="fa-solid fa-plus"></i>
+            </button>
         </div>
         <div id="main-cont2">
             <div class="server-state">
-                <div id="server-index">
-                    <p>~~~의 서버 어쩌고</p>
+                <div id="server-header">
+                    <a><!--서버 이름 들어갈 곳--></a>
+                    <i class="fa-solid fa-angle-down"></i>
                 </div>
                 <div class="channel-index-container">
                     <div class="chancont-header">
-                        <span id="togglebtn1"> 채팅 채널</span>
-                        <span id="ch-create">+</span>
+                        <span id="togglebtn1">
+                            <i class="fa-solid fa-angle-right"></i>
+                            <a>채팅 채널</a>
+                        </span>
+                        <i id="ch-create" class="fa-solid fa-plus"></i>
                     </div>
                     
                     <div id="channel-index">
@@ -95,7 +103,7 @@
                 </form>
             </div>
         </div>
-        <div id="customMenu">
+        <div id="channelMenu" class="customMenu">
             <div id="invchan" class="cmbtn">
                 초대하기
             </div>
@@ -112,6 +120,28 @@
             </div>
             <div><i class="fa-solid fa-check"></i></div>
             <div><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div id="serverMenu" class="customMenu">
+            <div class="cmbtn">
+                <a>초대하기</a>
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <div class="cmbtn">
+                <a>서버 설정</a>
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="cmbtn">
+                <a>채널 만들기</a>
+                <i class="fa-solid fa-circle-plus"></i>
+            </div>
+            <div class="cmbtn">
+                <a>알림 설정</a>
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div class="cmbtn">
+                <a>서버 프로필 편집</a>
+                <i class="fa-solid fa-pen"></i>
+            </div>
         </div>
     </div>
     <script src="/public/js/channels.js"></script>

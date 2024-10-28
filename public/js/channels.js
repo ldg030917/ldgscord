@@ -35,6 +35,7 @@ async function loadServer () {
                 let cid = await loadChannels(server.id);
                 document.getElementById(cid).click();       //서버 버튼 입력 시 자동으로 첫 번째 채널 접속
                 changeState(0);
+                document.getElementById("server-header").querySelector('a').textContent = server.servername;
                 //console.log('s click:', serverBtn.id)
             })
 
@@ -48,7 +49,7 @@ async function loadServer () {
 
 loadServer();
 
-const customMenu = document.getElementById('customMenu')      //채널 우클릭 시 뜰 팝업창
+const channelMenu = document.getElementById('channelMenu')      //채널 우클릭 시 뜰 팝업창
 let selectedId = '';
 
 async function loadChannels(sid) {       //채널 로드
@@ -76,9 +77,9 @@ async function loadChannels(sid) {       //채널 로드
             })
             chanBtn.addEventListener('contextmenu', (event) => {
                 event.preventDefault();
-                customMenu.style.display = 'flex';
-                customMenu.style.left = `${event.pageX}px`  //마우스 x 위치
-                customMenu.style.top = `${event.pageY}px`   //마우스 y 위치
+                channelMenu.style.display = 'flex';
+                channelMenu.style.left = `${event.pageX}px`  //마우스 x 위치
+                channelMenu.style.top = `${event.pageY}px`   //마우스 y 위치
                 selectedId = event.target.id;
             });
             cont.appendChild(chanBtn)        
@@ -92,8 +93,13 @@ async function loadChannels(sid) {       //채널 로드
     }
 }
 
-document.addEventListener('click', () => {
-    customMenu.style.display = 'none';
+document.addEventListener('click', (e) => {
+    channelMenu.style.display = 'none';
+    let sheader = document.getElementById("server-header");
+    if (!sheader.contains(e.target) && (sheader.querySelector('i').className =='fa-solid fa-xmark')) {
+        console.log(e.target);
+        sheader.click()
+    }
 })
 
 async function loadChats(cid) {     //채팅 로드
