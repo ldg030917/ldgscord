@@ -191,7 +191,7 @@ document.getElementById('channelform').addEventListener('submit', (event) => {
     .catch(error => {
         //에러 발생 시
     });
-    
+    document.getElementById('channelname').value = '';
 })
 
 
