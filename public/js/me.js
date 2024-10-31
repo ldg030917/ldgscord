@@ -6,7 +6,7 @@ async function loadfriends() {
     const friends = await f_res.json();
 
     const flist = document.getElementById("friendlist");
-    flist.innerHTML = '';
+    flist.innerHTML = '';   
 
     friends.forEach(friend => {
         const friendBtn = document.createElement('button');
