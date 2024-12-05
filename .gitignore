@@ -2,10 +2,8 @@
 node_modules/
 
 # Ignore specific file
-lib/db.js
-
 memo.txt
 
 config/
 
-txt.env
+.env
