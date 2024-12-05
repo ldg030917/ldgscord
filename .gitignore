@@ -4,6 +4,4 @@ node_modules/
 # Ignore specific file
 memo.txt
 
-config/
-
 .env
