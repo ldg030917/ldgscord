@@ -42,7 +42,7 @@ router.get('/channel/:id', (req, res) => {
         return res.status(401).json({error: '로그인 필요'});
     }
     const channel_id = req.params.id;
-    const query = `SELECT U.username, M.content, M.sent_at FROM Messages M 
+    const query = `SELECT U.username, M.content, M.sent_at FROM messages M 
     JOIN usertable U ON M.user_id = U.id 
     WHERE M.channel_id = ? ORDER BY M.sent_at asc`;
     db.query(query, [channel_id], (error, results) => {
