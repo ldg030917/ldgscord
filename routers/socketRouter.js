@@ -18,7 +18,7 @@ function setupSocket(io, db) {
             db.query(query, [uid, data.cid, data.msg, date], (error, results) => {
                 if (error) throw error;
             })
-            db.query('SELECT M.uid FROM memberTable M JOIN serverinfo S ON S.parent_id = M.sid WHERE S.id = ?', [data.cid], (error, results) => {
+            db.query('SELECT M.uid FROM membertable M JOIN serverinfo S ON S.parent_id = M.sid WHERE S.id = ?', [data.cid], (error, results) => {
                 if (error) throw error;
                 results.forEach(result => {
                     const socketid = userSockets[result];

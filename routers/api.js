@@ -10,7 +10,7 @@ router.get('/servers', (req, res) => {
     
     const uid = req.session.uid;
     //console.log(username)
-    const query = `SELECT S.id, S.servername FROM serverinfo S JOIN memberTable M on S.id = M.sid
+    const query = `SELECT S.id, S.servername FROM serverinfo S JOIN membertable M on S.id = M.sid
     WHERE M.uid = ?`;
 
     db.query(query, [uid], (error, results) => {
@@ -62,7 +62,7 @@ router.post('/create/server', (req, res) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});        
         const pid = results.insertId;
         //서버와 유저 관계 추가
-        db.query('INSERT INTO memberTable (sid, uid) VALUES (?, ?)', [pid, uid], (error, results) => {      
+        db.query('INSERT INTO membertable (sid, uid) VALUES (?, ?)', [pid, uid], (error, results) => {      
             if (error) return res.status(500).json({error: 'DB Query failed!'});
             //기본적인 채팅 채널 추가
             db.query('INSERT INTO serverinfo (servername, parent_id) VALUE (?, ?)', ['일반', pid], (error, results) => {

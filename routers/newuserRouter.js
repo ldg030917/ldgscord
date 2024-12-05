@@ -95,10 +95,10 @@ router.get('/invite/:encodedpath', (req, res) => {
     const path = atob(req.params.encodedpath);
     const sid = path.split('/')[2];
     const uid = req.session.uid;
-    db.query('SELECT * FROM memberTable WHERE uid = ? AND sid = ?', [uid, sid], (error, results) => {
+    db.query('SELECT * FROM membertable WHERE uid = ? AND sid = ?', [uid, sid], (error, results) => {
         if (error) throw error;
         if (results.length <= 0) {
-            db.query('INSERT INTO memberTable (uid, sid) VALUES(?, ?)', [uid, sid], (error, results) => {
+            db.query('INSERT INTO membertable (uid, sid) VALUES(?, ?)', [uid, sid], (error, results) => {
                 if (error) throw error2;
             })
         }
