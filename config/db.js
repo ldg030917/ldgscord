@@ -22,6 +22,10 @@ db.query('SELECT DATABASE()', (error, results) => {
     console.log('현재 연결된 데이터베이스:', results[0]['DATABASE()']);
 })
 
+db.query('SHOW TABLES', (error, results) => {
+    console.log('테이블 목록:', results);
+})
+
 module.exports = db  //db를 다른 파일에서 사용할 수 있도록 함 
 
 //이 파일을 다른 곳에서 require()를 통해 불러오면 MySQL 데이터베이스에 연결된 db 객체를 사용할 수 있게 됨
