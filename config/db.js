@@ -10,7 +10,13 @@ const db = mysql.createConnection({
     database : process.env.DB_DATABASE     //연결할 db 이름
 })
 
-db.connect()    //연결 시도
+db.connect((err) => {
+    if (err) {
+        console.error('db connect error : ', err.stack);
+        return;
+    }
+    console.log('db connected');
+});    //연결 시도
 
 module.exports = db  //db를 다른 파일에서 사용할 수 있도록 함 
 
