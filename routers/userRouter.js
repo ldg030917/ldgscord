@@ -44,7 +44,7 @@ router.post('/login_process', (req, res) => {       //로그인
     var password = req.body.pw
     try {
         if (username && password){
-            db.query('SELECT password FROM userTable WHERE username = ?', [username], async function(error, results, fields) {
+            db.query('SELECT password FROM usertable WHERE username = ?', [username], async function(error, results, fields) {
                 // DB에 같은 회원이 있는지 확인
                 if (error) throw error;
                 if (results.length > 0){
@@ -114,7 +114,7 @@ router.post('/register_process', async (req, res) => {       //회원가입
         if (username && password && password2) {
             var hpassword = await bcrypt.hash(password, 10)
             console.log(`id:${username}, pw:${password}, hpw:${hpassword}`)
-            db.query(' SELECT * FROM userTable WHERE username = ?', [username], function(error, results, fields) {
+            db.query(' SELECT * FROM usertable WHERE username = ?', [username], function(error, results, fields) {
                 // DB에 같은 이름의 회원아이디가 있는지 확인
                 if (error) throw error;
                 if (results.length <= 0 && password == password2) {     // DB에 같은 이름의 회원아이디가 없고, 비밀번호가 올바르게 입력된 경우 
