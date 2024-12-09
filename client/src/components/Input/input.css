@@ -1,0 +1,14 @@
+.input-space {
+    width: 350px;
+    height: 25px;
+    color: azure;
+    background-color: rgb(30, 31, 34);
+    border: 0;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.input-space:focus {
+    outline: none;
+}

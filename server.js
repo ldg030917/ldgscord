@@ -6,7 +6,7 @@ const socketIo = require('socket.io');
 const bodyParser = require('body-parser')
 const path = require('path');
 const cors = require('cors')
-const userRouter = require('./routers/newuserRouter');
+const userRouter = require('./routers/userRouter');
 const setupSocket = require('./routers/socketRouter');
 const apiRouter = require('./routers/api');
 
@@ -29,6 +29,7 @@ app.use(express.static('public'));      //정적 파일 제공
 // EJS 레이아웃 미들웨어 설정
 app.use(expressLayouts);
 
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -74,6 +75,6 @@ app.get('/channels/:id/:id2', (req, res) => {
 
 setupSocket(io, db);
 
-server.listen(3000,  () => {
-    console.log("start server at port 3000")
+server.listen(5000,  () => {
+    console.log("start server at port 5000")
 })

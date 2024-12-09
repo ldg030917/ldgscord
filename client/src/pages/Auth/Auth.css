@@ -1,0 +1,27 @@
+.login-page {
+    margin: 0;
+    padding: 0;
+    background-image: url('./v4.webp');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
+
+.login-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(49, 51, 56);
+    width: 20%;
+    height: 36%;
+    border-radius: 5px;
+    padding: 40px;
+}
+
+.label {
+    display: block;
+    color: antiquewhite;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}

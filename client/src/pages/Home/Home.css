@@ -1,0 +1,19 @@
+.home-page {
+    margin: 0;
+    padding: 0;
+    background-image: url('./background2.webp');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
+
+.home-button {
+    position: absolute;
+    top: 50px;
+    right: 300px;
+    z-index: 10;
+    width: 70px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+}
