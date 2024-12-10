@@ -4,11 +4,12 @@ const db = require('../config/db');
 const router = express.Router();
 
 router.get('/servers', (req, res) => {
+    console.log('Server List Request!');
     if (!req.session.is_logined) {
         return res.status(401).json({error: '로그인 필요'})
     }
     
-    const uid = req.session.uid;
+    const uid = req.session.user_id;
     //console.log(username)
     const query = `SELECT S.id, S.servername FROM serverinfo S JOIN membertable M on S.id = M.sid
     WHERE M.uid = ?`;
@@ -17,7 +18,7 @@ router.get('/servers', (req, res) => {
         if (error) {
             return res.status(500).json({error: 'DB Query failed!'})
         }
-        //console.log(results)
+        console.log(results)
         res.json(results)
     })
 })
@@ -56,7 +57,7 @@ router.post('/create/server', (req, res) => {
         return res.status(401).json({error: '로그인 필요'});
     }
     const servername = req.body.servername;
-    const uid = req.session.uid;
+    const uid = req.session.user_id;
     //서버 추가
     db.query('INSERT INTO serverinfo (servername, parent_id) VALUE (?, ?)', [servername, null], (error, results) => {
         if (error) return res.status(500).json({error: 'DB Query failed!'});        

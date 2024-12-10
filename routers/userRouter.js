@@ -24,7 +24,7 @@ router.post('/login', (req, res) => {       //로그인
                     req.session.user_id = user_id;
                     req.session.nickname = results[0].nickname;
                     req.session.save(function () {
-                        res.redirect('/channels/@me');
+                        res.status(200).json({ message: '로그인 성공!' });
                     });
                 }
                 else {

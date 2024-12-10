@@ -149,9 +149,7 @@ document.getElementById('serverform').addEventListener('submit', (event) => {
     .then(data => {
         sid = data
         document.getElementById('myModal').style.display = "none";
-        loadServer().then(() => {
-            document.getElementById(sid).click()
-        })
+        loadServer();
     })
     .catch(error => {
         //에러 발생 시

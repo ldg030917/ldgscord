@@ -1,0 +1,5 @@
+.channel-list {
+    background-color: rgb(43, 45, 49);
+    overflow: auto;
+    margin: 0;
+}

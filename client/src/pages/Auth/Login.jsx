@@ -25,7 +25,7 @@ function LoginPage() {
         },
       });
 
-      navigate('/channels');
+      navigate('/channels/@me');
       console.log(response);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -45,7 +45,7 @@ function LoginPage() {
           flexDirection: 'column',
           }}>
           <h1 style={{ color: 'white', margin: '0px' }}>돌아오신 것을 환영해요!</h1>
-          <p style={{ color: 'GrayText', margin: '0px' }}>다시 만나다니 너무 반갑지는 않고요!</p>
+          <p style={{ color: 'GrayText', margin: '0px' }}>다시 만나다니 너무 반가워요!</p>
         </div>
         <label className='label'>아이디 {error && <span style={{ color: 'red'}}>{error}</span>} </label>
         <Input 

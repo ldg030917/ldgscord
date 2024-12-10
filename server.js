@@ -17,7 +17,12 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIo(server)
 
-app.use(cors())
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    credentials: true,
+}
+
+app.use(cors(corsOptions));
 
 port = 3000
 
@@ -37,9 +42,11 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 const sessionMiddleware = session({
     secret: 'my-secret-key',  // 세션 암호화를 위한 비밀 키
     resave: false,            // 세션이 수정되지 않아도 다시 저장할지 여부
-    saveUninitialized: true,  // 초기화되지 않은 세션도 저장할지 여부
+    saveUninitialized: false,  // 초기화되지 않은 세션도 저장할지 여부
     cookie: { 
-        maxAge: 24*60*60*1000        // 쿠키의 수명 (밀리초 단위)
+        httpOnly: true,
+        secure: false,
+        maxAge: 24*60*60*1000,     // 쿠키의 수명 (밀리초 단위)
     }
 })
 

@@ -1,0 +1,47 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.sub-container1 {
+    width: 70px;
+    height: 100vh;
+    background-color: var(--bg-color-1);
+}
+
+.sub-container2 {
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    height: 100vh;
+    background-color: var(--bg-color-2);
+}
+
+.sub-container3 {
+    flex-grow: 1;
+    height: 100vh;
+    background-color: var(--bg-color-3);
+}
+
+.sub-container2-header {
+    height: 48px;
+    border-bottom: 1px solid rgba(27, 27, 27, 0.829);
+}
+
+.sub-container2-body {
+    flex-grow: 1;
+}
+
+.sub-container2-profile {
+    height: 53px;
+    background-color: var(--bg-color-4);
+}
+
+.sub-container3-header {
+    height: 48px;
+    border-bottom: 1px solid rgba(27, 27, 27, 0.829);
+}
+
+.sub-container3-body {
+    flex-grow: 1;
+}
