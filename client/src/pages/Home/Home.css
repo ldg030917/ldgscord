@@ -9,6 +9,7 @@
 
 .home-button {
     position: absolute;
+    background-color: aliceblue;
     top: 50px;
     right: 300px;
     z-index: 10;
