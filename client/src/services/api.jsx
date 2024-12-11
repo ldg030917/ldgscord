@@ -21,3 +21,32 @@ export const getChannels = async (serverId) => {
     return null;
   }
 };
+
+/** 로그인 성공 시 true, 실패 시 false 반환 */
+export const login = async (data) => {
+  try{
+    const response = await axios.post(`${API_URL}/api/login`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(response);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const register = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/register`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+
+}

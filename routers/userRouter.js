@@ -5,12 +5,12 @@ const bcrypt = require('bcrypt');
 
 
 
-router.get('/login', (req, res) => {        //로그인 화면
+router.get('/api/login', (req, res) => {        //로그인 화면
     res.render('login', {layout: 'layouts/layout2'})
 })
 
 
-router.post('/login', (req, res) => {       //로그인
+router.post('/api/login', (req, res) => {       //로그인
     var user_id = req.body.user_id
     var password = req.body.password
     try {
@@ -46,25 +46,26 @@ router.get('/register', (req, res) => {
     res.render('register', {layout: 'layouts/layout2'})
 })
 
-router.post('/register', async (req, res) => {
-    var user_id = req.body.user_id
-    var password = req.body.password
-    var password2 = req.body.password2
+router.post('/api/register', async (req, res) => {
+    var email = req.body.email;
+    var user_id = req.body.user_id;
+    var nickname = req.body.nickname;
+    var password = req.body.password;
+    var password2 = req.body.password;
     if (password == password2) {
         try{
             var hpassword = await bcrypt.hash(password, 10)
             db.query("SELECT * FROM users WHERE user_id = ?", [user_id], function (error, results) {
                 if (error) throw error;
                 if (results.length <= 0) {     // DB에 같은 이름의 회원아이디가 없고, 비밀번호가 올바르게 입력된 경우 
-                    db.query('INSERT INTO users (user_id, password) VALUES(?,?)', [user_id, hpassword], function (error2, data) {
+                    db.query('INSERT INTO users (user_id, password, nickname, email) VALUES(?,?,?,?)', 
+                    [user_id, hpassword, nickname, email], function (error2, data) {
                         if (error2) throw error2;
-                        res.send(`<script type="text/javascript">alert("회원가입이 완료되었습니다!");
-                        document.location.href="/login";</script>`);
+                        res.status(200).json({ message: '회원가입 성공!' });
                     });
                 }
                 else {  //같은 아이디 존재
-                    res.send(`<script type="text/javascript">alert("같은 아이디의 회원이 존재합니다."); 
-                    document.location.href="/register";</script>`);
+                    res.status(400).json({ message: '같은 아이디 존재!' });
                 }
             })
         }

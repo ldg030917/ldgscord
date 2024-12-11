@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { register } from '../../services/api';
+import Input from '../../components/Input/Input';
 import './Auth.css'
 
-function LoginPage() {
+function RegisterPage() {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,52 +18,52 @@ function LoginPage() {
     const data = {
       user_id: userId,
       password: password,
+      email: email,
+      nickname: nickname,
     };
 
-    try{
-      const response = await axios.post('http://localhost:5000/login', data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    // 로그인 로직을 여기에 추가 (예: 백엔드 API 호출)
-    // 예시로 로그인 후, 다른 페이지로 이동
-    console.log('아이디:', userId);
-    console.log('비밀번호:', password);
+    await register(data);
 
-    navigate('/channels');
+    navigate('/login');
   };
 
   return (
-    <div className='login-page'>
-      <div className="login-form">
-        <form onSubmit={handleSubmit}>
-          <input 
-            type="text"
-            name="user_id" 
-            placeholder="아이디" 
-            value={userId} 
-            onChange={(e) => setUserId(e.target.value)} 
-            required 
-          />
-          <input 
-            type="password" 
-            name="password" 
-            placeholder="비밀번호" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-          <input className="btn" type="submit" value="로그인" />
-        </form>
-        <a href="/register">혹시 계정이 없으신가요?</a>
+    <div className="register-form">
+      <div style={{ 
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        }}>
+        <h1 style={{ color: 'white', margin: '0px' }}>계정 만들기</h1>
       </div>
+      <label className='label'>이메일</label>
+      <Input
+        type='text'
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <label className='label'>별명</label>
+      <Input
+        type='text'
+        value={nickname}
+        onChange={(e) => setNickname(e.target.value)}
+      />
+      <label className='label'>사용자명</label>
+      <Input
+        type="text"
+        value={userId} 
+        onChange={(e) => setUserId(e.target.value)} 
+      />
+      <label className='label'>비밀번호</label>
+      <Input
+        type="password" 
+        value={password} 
+        onChange={(e) => setPassword(e.target.value)} 
+      />
+      <button className="btn" onClick={handleSubmit}>계속하기</button>
+      <a href="/login">이미 계정이 있으신가요?</a>
     </div>
-    
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

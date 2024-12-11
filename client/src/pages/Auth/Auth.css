@@ -1,4 +1,4 @@
-.login-page {
+.auth-page {
     margin: 0;
     padding: 0;
     background-image: url('./v4.webp');
@@ -7,16 +7,24 @@
     height: 100vh;
 }
 
-.login-form {
+.auth-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgb(49, 51, 56);
-    width: 20%;
-    height: 36%;
+    background-color: var(--bg-color-2);    
     border-radius: 5px;
     padding: 40px;
+}
+
+.login-form {
+    width: 400px;
+    height: 300px;
+}
+
+.register-form {
+    width: 400px;
+    height: 500px;
 }
 
 .label {
