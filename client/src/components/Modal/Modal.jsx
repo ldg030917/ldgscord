@@ -1,19 +1,17 @@
 // Modal.js
 import React from 'react';
 import './Modal.css';
+import { IoClose } from "react-icons/io5";
 
-const Modal = ({ showModal, closeModal }) => {
+
+const Modal = ({ showModal, closeModal, children }) => {
   if (!showModal) return null;
 
   return (
     <div className='modal-overay' onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={closeModal}>&times;</button>
-        <h2>서버 추가</h2>
-        <form>
-          <input type="text" placeholder="서버 이름" />
-          <button type="submit">추가</button>
-        </form>
+        <button className="close-btn" onClick={closeModal}><IoClose /></button>
+        {children}
       </div>
     </div>
   );

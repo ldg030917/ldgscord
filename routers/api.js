@@ -52,7 +52,7 @@ router.get('/channel/:id', (req, res) => {
     })
 })
 
-router.post('/create/server', (req, res) => {
+router.post('/servers', (req, res) => {
     if (!req.session.is_logined) {
         return res.status(401).json({error: '로그인 필요'});
     }
@@ -68,14 +68,14 @@ router.post('/create/server', (req, res) => {
             //기본적인 채팅 채널 추가
             db.query('INSERT INTO serverinfo (servername, parent_id) VALUE (?, ?)', ['일반', pid], (error, results) => {
                 if (error) return res.status(500).json({error: 'DB Query failed!'});
-                return res.json(pid);
+                return res.status(200).json({server_id: pid});
             });
         });
     });
 })
 
 
-router.post('/create/channel', (req, res) => {
+router.post('/channels', (req, res) => {
     if (!req.session.is_logined) {
         return res.status(401).json({error: '로그인 필요'});
     }

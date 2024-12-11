@@ -1,0 +1,9 @@
+.server-add-button {
+    color: green;
+
+}
+
+.server-add-button:hover {
+    color: white;
+    background-color: green;
+}

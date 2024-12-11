@@ -50,3 +50,16 @@ export const register = async (data) => {
   }
 
 }
+
+export const createServer = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/servers`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return false;
+  }
+}

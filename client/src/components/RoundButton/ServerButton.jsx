@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ServerButton.css';
+import RoundButton from './RoundButton';
 
 function ServerButton({ server }) {
   const navigate = useNavigate();
@@ -10,9 +10,9 @@ function ServerButton({ server }) {
   };
 
   return (
-    <div className="server-button" onClick={handleClick}>
+    <RoundButton onClick={handleClick}>
       {server.servername}
-    </div>
+    </RoundButton>
   );
 }
 

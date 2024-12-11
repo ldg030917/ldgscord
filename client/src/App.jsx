@@ -3,9 +3,7 @@ import './styles/index.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import HomePage from './pages/Home/Home';
-import LoginPage from './pages/Auth/Login';
 import ChannelPage from './pages/Channel/Channel';
-import RegisterPage from './pages/Auth/Register';
 import Auth from './pages/Auth/Auth';
 
 axios.defaults.withCredentials = true;

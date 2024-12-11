@@ -12,7 +12,8 @@
 }
 
 .modal-content {
-  background-color: white;
+  color: white;
+  background-color: var(--bg-color-3);
   padding: 20px;
   border-radius: 5px;
   width: 400px;
@@ -24,8 +25,14 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  color: gray;
   background-color: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 25px;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: white;
 }
