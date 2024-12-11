@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Auth.css'
 import Input from '../../components/Input/Input';
 import { login } from '../../services/api';
+import BasicButton from '../../components/BasicButton/BasicButton';
 
 function LoginPage() {
   const [userId, setUserId] = useState('');
@@ -31,7 +32,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-form">
+    <form className="login-form" onSubmit={handleSubmit}>
       <div style={{ 
         display: 'flex',
         alignItems: 'center',
@@ -40,21 +41,31 @@ function LoginPage() {
         <h1 style={{ color: 'white', margin: '0px' }}>돌아오신 것을 환영해요!</h1>
         <p style={{ color: 'GrayText', margin: '0px' }}>다시 만나다니 너무 반가워요!</p>
       </div>
-      <label className='label'>아이디 {error && <span style={{ color: 'red'}}>{error}</span>} </label>
       <Input 
+        label={
+          <>
+            아이디
+            {error && <span style={{ color: 'red'}}>{error}</span>}
+          </>
+        }
         value={userId} 
         onChange={(e) => setUserId(e.target.value)} 
         type={'text'} 
       />
-      <label className='label'>비밀번호 {error && <span style={{ color: 'red'}}>{error}</span>} </label>
       <Input 
+        label={
+          <>
+            비밀번호
+            {error && <span style={{ color: 'red'}}>{error}</span>}
+          </>
+        }
         value={password} 
         onChange={(e) => setPassword(e.target.value)} 
         type={'password'} 
       />
-      <a href="/register">혹시 계정이 없으신가요?</a>
-      <button className="btn" onClick={handleSubmit}>로그인</button>
-    </div>
+      <BasicButton type={'submit'}>로그인</BasicButton>
+      <a href="/register">가입하기</a>
+    </form>
   );
 }
 

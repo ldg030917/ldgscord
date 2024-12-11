@@ -1,9 +1,10 @@
 import React from "react";
 import './input.css';
 
-function Input({ value, onChange, type = 'text', placeholder }) {
+function Input({ label, value, onChange, type = 'text', placeholder }) {
   return (
-    <div className="input-container">
+    <div>
+      <label className="input-label">{label}</label>
       <input
         className="input-space"
         type={type}

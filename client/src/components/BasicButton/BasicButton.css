@@ -1,0 +1,30 @@
+.basic-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    font-size: 16px;
+    min-width: 50px;
+    height: 45px;
+    max-height: 45px;
+    flex-grow: 1;
+    transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
+.button-blue {
+    background-color: var(--blue-button-color);
+}
+
+.button-blue:hover {
+    filter: brightness(0.8);
+}
+
+.button-gray {
+    background-color: var(--bg-color-1);
+}
+
+.button-gray:hover {
+    filter: brightness(1.2);
+}

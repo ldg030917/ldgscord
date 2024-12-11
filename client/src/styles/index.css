@@ -3,6 +3,8 @@
     --bg-color-2: rgb(43, 45, 49);
     --bg-color-3: rgb(49, 51, 56);
     --bg-color-4: rgb(35, 36, 40);
+    --blue-button-color: rgb(88, 101, 242);
+    --blue-text-color: rgb(0, 170, 252);
 }
 
 * {
