@@ -11,7 +11,7 @@ function ServerButton({ server }) {
 
   return (
     <RoundButton onClick={handleClick}>
-      {server.servername}
+      {server.name}
     </RoundButton>
   );
 }

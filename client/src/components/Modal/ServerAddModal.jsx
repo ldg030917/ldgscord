@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import Input from "../Input/Input";
-import { createServer } from "../../services/api";
+import { createServer, createChannel } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import BasicButton from "../BasicButton/BasicButton";
 
 function ServerAddModal({ showModal, closeModal }) {
   const navigate = useNavigate();
-  const [servername, SetServername] = useState('');
+  const [serverName, SetServerName] = useState('');
 
   const handleSubmit = async(e) => {
     e.preventDefault();
 
     const data = {
-      servername: servername,
+      name: serverName,
     };
 
-    const response = await createServer(data);
+    const serverRes = await createServer(data);
+    const channelRes = await createChannel(null, serverRes.server_id);
 
-    navigate(`/channels/${response.server_id}`);
+    navigate(`/channels/${serverRes.server_id}/${channelRes.channel_id}`);
     closeModal();
   }
 
@@ -25,11 +27,12 @@ function ServerAddModal({ showModal, closeModal }) {
     <Modal showModal={showModal} closeModal={closeModal}>
       <h1>서버 생성</h1>
       <Input 
-        value={servername}
-        onChange={(e) => SetServername(e.target.value)}
+        value={serverName}
+        placeholder={"My Server"}
+        onChange={(e) => SetServerName(e.target.value)}
         type="text"
       />
-      <button onClick={handleSubmit}>생성</button>
+      <BasicButton onClick={handleSubmit}>생성</BasicButton>
     </Modal>
   )
 }

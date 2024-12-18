@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/*' element={<Auth />} />
-        <Route path='/channels/:serverId/' element={<ChannelPage />} />
+        <Route path='/channels/:serverId/:channelId?' element={<ChannelPage />} />
       </Routes>
     </Router>
   );

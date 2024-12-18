@@ -12,6 +12,9 @@
 }
 
 .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   color: white;
   background-color: var(--bg-color-3);
   padding: 20px;

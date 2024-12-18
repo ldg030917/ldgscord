@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const API_URL = 'http://localhost:5000'
 
@@ -14,7 +14,7 @@ export const getServers = async () => {
 
 export const getChannels = async (serverId) => {
   try {
-    const response = await axios.get(`${API_URL}/api/server/${serverId}`);
+    const response = await axios.get(`${API_URL}/api/servers/${serverId}/channels`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching content for server ${serverId}:`, error);
@@ -54,6 +54,19 @@ export const register = async (data) => {
 export const createServer = async (data) => {
   try {
     const response = await axios.post(`${API_URL}/api/servers`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return false;
+  }
+}
+
+export const createChannel = async (data, serverId) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/servers/${serverId}/channels`, data, {
       headers: {
         'Content-Type': 'application/json',
       },

@@ -1,4 +1,6 @@
 .channel-list {
+    display: flex;
+    flex-direction: column;
     background-color: rgb(43, 45, 49);
     overflow: auto;
     margin: 0;
