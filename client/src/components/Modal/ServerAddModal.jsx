@@ -15,11 +15,11 @@ function ServerAddModal({ showModal, closeModal }) {
     const data = {
       name: serverName,
     };
-
+    console.log("AAAAAAAAAAAAAAAAAAAA");
     const serverRes = await createServer(data);
-    const channelRes = await createChannel(null, serverRes.server_id);
+    console.log("AAACCADADA", serverRes);
 
-    navigate(`/channels/${serverRes.server_id}/${channelRes.channel_id}`);
+    navigate(`/channels/${serverRes.server_id}/${serverRes.channel_id}`);
     closeModal();
   }
 

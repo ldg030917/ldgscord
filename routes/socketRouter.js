@@ -13,11 +13,11 @@ function setupSocket(io, db) {
         
         socket.on('send', (data) => {
             const date = moment().format('YYYY.MM.DD. HH:mm:ss');
-            console.log('send:', data)
-            query = `INSERT INTO messages (user_id, channel_id, content, sent_at) VALUES (?, ?, ?, ?)`  //존재하는 서버, 채널인지 확인하고 저장하기
+            console.log('send:', data);
+            query = `INSERT INTO messages (user_id, channel_id, content, sent_at) VALUES (?, ?, ?, ?)`;  //존재하는 서버, 채널인지 확인하고 저장하기
             db.query(query, [uid, data.cid, data.msg, date], (error, results) => {
                 if (error) throw error;
-            })
+            });
             db.query('SELECT M.uid FROM membertable M JOIN serverinfo S ON S.parent_id = M.sid WHERE S.id = ?', [data.cid], (error, results) => {
                 if (error) throw error;
                 results.forEach(result => {

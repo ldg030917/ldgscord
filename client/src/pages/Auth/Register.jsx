@@ -17,15 +17,17 @@ function RegisterPage() {
     e.preventDefault();
 
     const data = {
-      user_id: userId,
+      id: userId,
       password: password,
       email: email,
       nickname: nickname,
     };
-
-    await register(data);
-
-    navigate('/login');
+    try {
+      const response = await register(data);
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

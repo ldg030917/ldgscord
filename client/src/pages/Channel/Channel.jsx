@@ -6,6 +6,8 @@ import ServerList from '../../components/ServerList/ServerList';
 import ChannelList from '../../components/ChannelList/ChannelList';
 import { getServers, getChannels } from '../../services/api';
 import ChatBox from '../../components/ChatBox/ChatBox';
+import MessageList from '../../components/MessageList/MessageList';
+import { SocketIoProvider } from '../../services/socket';
 import axios from 'axios';
 import './Channel.css';
 
@@ -17,15 +19,16 @@ function ChannelPage() {
   const [showChannels, setShowChannels] = useState(false);
   
   const fetchServers = async () => {
+    console.log("fetchingServers!!");
     const data = await getServers();
     setServers(data);
-    //console.log(data);
+    console.log(data);
   };
 
   const fetchChannels = async (serverId) => {
     const data = await getChannels(serverId);
     setChannels(data);
-    //console.log(serverId, data);
+    console.log('fetchChannels: ', serverId, data);
   };
   
 
@@ -36,34 +39,36 @@ function ChannelPage() {
       setShowChannels(true);  // 서버 ID가 있으면 채널 목록
     }
     fetchServers();
+    console.log("FETCHING!!!!!!!!!!!!!!!!!!!!");
     fetchChannels(serverId);
   }, [serverId]);
 
   return (
-    <div className='main-container'>
-      <div className='sub-container1'>
-        <ServerList servers={servers} />
-      </div>
-      <div className='sub-container2'>
-        <div className='sub-container2-header'>
+    <SocketIoProvider>
+      <div className='main-container'>
+        <div className='sub-container1'>
+          <ServerList servers={servers} />
+        </div>
+        <div className='sub-container2'>
+          <div className='sub-container2-header'>
 
+          </div>
+          <div className='sub-container2-body'>
+            {showChannels ? <ChannelList serverId={serverId} channels={channels} /> : <>AAAAAAAAA</>}
+          </div>
+          <div className='sub-container2-profile'>
+          </div>
         </div>
-        <div className='sub-container2-body'>
-          {showChannels ? <ChannelList serverId={serverId} channels={channels} /> : <>AAAAAAAAA</>}
-          <h1>{serverId}</h1>
-          <h1>{channelId}</h1>
-        </div>
-        <div className='sub-container2-profile'>
+        <div className='sub-container3'>
+          <div className='sub-container3-header'>
+          </div>
+          <div className='sub-container3-body'>
+            <MessageList channelId={channelId} />
+            <ChatBox />
+          </div>
         </div>
       </div>
-      <div className='sub-container3'>
-        <div className='sub-container3-header'>
-        </div>
-        <div className='sub-container3-body'>
-          <ChatBox />
-        </div>
-      </div>
-    </div>
+    </SocketIoProvider>
   );
 }
 

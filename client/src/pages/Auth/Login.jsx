@@ -16,18 +16,18 @@ function LoginPage() {
     e.preventDefault();
 
     const data = {
-      user_id: userId,
+      id: userId,
       password: password,
     };
 
-    const islogined = await login(data);
-    if(islogined) {
+    try {
+      const response = await login(data);
       setError('');
       console.log('로그인 성공');
       navigate('/channels/@me');
-    } else {
+    } catch (error) {
       setError('유효하지 않은 아이디 또는 비밀번호입니다');
-      console.log('로그인 실패');
+      console.log('로그인 실패', error.response?.status || error.message);
     }
   };
 

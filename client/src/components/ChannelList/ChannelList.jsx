@@ -6,6 +6,8 @@ import BasicButton from "../BasicButton/BasicButton";
 import './ChannelList.css';
 
 function ChannelList({ serverId, channels }) {
+  console.log(channels);
+  console.log('Is array:', Array.isArray(channels));
   const navigate = useNavigate();
 
   const handleClick = (channelId) => {

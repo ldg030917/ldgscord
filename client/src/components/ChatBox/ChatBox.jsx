@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useSocket } from "../../services/socket";
 import { FaDiscord } from "react-icons/fa";
+import { createMessage } from "../../services/api";
 import './ChatBox.css';
 
 function ChatBox() {
-  const [message, setMessage] = useState('');
+  const socket = useSocket();
+  const [content, setContent] = useState('');
   const textareaRef = useRef(null);
+  const location = useLocation();
+  const splitUrl = location.pathname.split('/');
+  //console.log(splitUrl);
 
   const adjustHeight = () => {
     const textarea = textareaRef.current;
@@ -15,7 +22,7 @@ function ChatBox() {
   };
 
   const handleInputChange = (event) => {
-    setMessage(event.target.value);
+    setContent(event.target.value);
   };
 
   const handleKeyDown = (event) => {
@@ -31,13 +38,20 @@ function ChatBox() {
 
   const handleSubmit = () => {
     // 폼 제출 처리 (예: API 호출, 콘솔 출력 등)
-    console.log('폼 제출:', message);
-    setMessage(''); // 메시지 초기화 (옵션)
+    socket.emit('SEND_MESSAGE', { 
+        serverId: splitUrl[2],
+        channelId: splitUrl[3], 
+        content: content
+      }
+    );
+    createMessage({ content: content }, splitUrl[3]);
+    console.log('폼 제출:', content);
+    setContent(''); // 메시지 초기화 (옵션)
   };
   
   useEffect(() => {
     adjustHeight();
-  }, [message]);
+  }, [content]);
   
   return(
     <form className="chat-box" onSubmit={(e) => e.preventDefault()}>
@@ -45,11 +59,11 @@ function ChatBox() {
       <textarea 
         ref={textareaRef}
         className="chat-input"
-        value={message}
+        value={content}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         rows="1" 
-        autocomplete="off" 
+        autoComplete="off" 
         spellCheck="false"
       />
       <button style={{ display: 'none' }} type="submit" onClick={handleSubmit}/>
