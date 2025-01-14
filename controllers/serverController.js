@@ -45,4 +45,26 @@ const getServerChannels = async (req, res) => {
     }
 }
 
-module.exports = { createServer, getServerById, getUserServers, getServerChannels };
+/** 서버에 속한 사용자 리스트 */
+const getUsers = async (req, res) => {
+    const server_id = req.params.server_id;
+    try {
+        const users = serverService.getUsers(server_id);
+        res.status(200).json({ users: users });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+const joinUserToServer = async (req, res) => {
+    const server_id = req.params.server_id;
+    const user_id = req.user.id;
+    try {
+        const result = serverService.joinUserToServer(user_id, server_id);
+        res.status(200).json({});
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+module.exports = { createServer, getServerById, getUserServers, getServerChannels, getUsers, joinUserToServer };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaDiscord } from "react-icons/fa";
+import WIP from '../WIP';
 import './MessageBox.css';
 
 function MessageBox({data}) {
@@ -8,6 +8,7 @@ function MessageBox({data}) {
     <div className='message-box'>
       <div className='profile-img'>
         {data.user_id}
+        <WIP></WIP>
       </div>
       <div className='text-area'>
         <div>

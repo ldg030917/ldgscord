@@ -39,6 +39,15 @@ const getChannels = async (server_id) => {
     }
 }
 
+const getUsers = async (server_id) => {
+    try {
+        const users = await serverModel.getUsers(server_id);
+        return users;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const joinUserToServer = async (user_id, server_id) => {
     try {
         const result = await serverModel.updateParticipant(user_id, server_id);
@@ -48,4 +57,4 @@ const joinUserToServer = async (user_id, server_id) => {
     }
 }
 
-module.exports = { createServer, getServerById, getUserServers, getChannels, joinUserToServer }
+module.exports = { createServer, getServerById, getUserServers, getChannels, getUsers, joinUserToServer }

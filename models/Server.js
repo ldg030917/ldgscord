@@ -27,6 +27,17 @@ const getUserServers = async (user_id) => {
     }
 }
 
+/** R: server에 속한 유저 조회 */
+const getUsers = async (server_id) => {
+    const query = `SELECT user_id AS id FROM server_paricipant WHERE server_id = ?`;
+    try {
+        const [results] = await pool.query(query, [server_id]);
+        return results;
+    } catch (error) {
+        throw error;
+    }
+}
+
 /** UPDATE: 서버에 참가자 추가 */
 const updateParticipant = async (user_id, server_id) => {
     const query = `INSERT INTO server_participant (user_id, server_id) VALUE (?, ?)`;
@@ -42,4 +53,4 @@ const deleteServer = () => {
     const query = `DELETE`;
 };
 
-module.exports = { createServer, getServerById, getUserServers, updateParticipant };
+module.exports = { createServer, getServerById, getUserServers, getUsers, updateParticipant };

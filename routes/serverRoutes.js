@@ -9,4 +9,7 @@ router.post('/servers', serverController.createServer);
 router.get('/servers/:server_id/channels', serverController.getServerChannels);
 //router.get('/servers/:server_id/channels');
 
+router.get('/servers/:server_id/members', serverController.getUsers);
+router.post('/servers/:server_id/members', serverController.joinUserToServer);
+
 module.exports = router;
