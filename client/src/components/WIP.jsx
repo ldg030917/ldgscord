@@ -1,9 +1,10 @@
 import React from "react";
 import { HiWrenchScrewdriver } from "react-icons/hi2";
 
-function WIP() {
+function WIP({ size = 12 }) {
     const style = {
-        color: 'purple'
+        color: 'purple',
+        fontSize: `${size}px`
     };
 
     return (
