@@ -1,12 +1,12 @@
 .context-menu {
     position: fixed;
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: var(--bg-color-5);
+    color: var(--basic-text-color-1);
+    border: 0px;
     border-radius: 4px;
     list-style: none;
-    padding: 8px 0;
+    padding: 8px;
     margin: 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
   }
 
@@ -17,7 +17,7 @@
   }
   
   .context-menu li:hover {
-    background-color: #f0f0f0;
+    filter: brightness(1.5);
   }
   
   .right-click-area {
