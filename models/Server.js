@@ -49,8 +49,33 @@ const updateParticipant = async (user_id, server_id) => {
     }
 };
 
+/** U: 서버 이름 변경 */
+const updateServerName = async (server_id, name) => {
+    const query = `UPDATE server SET name = ? WHERE id = ?`;
+    try {
+        const [results] = await pool.query(query, [name, server_id]);
+        return results;
+    } catch (error) {
+        throw error;
+    }
+}
+
+/** U: 유저의 서버 접근 권한 수정 */
+const updateUserPermisions = async (server_id, user_id, access) => {
+    const query = `UPDATE`
+}
+
 const deleteServer = () => {
     const query = `DELETE`;
 };
 
-module.exports = { createServer, getServerById, getUserServers, getUsers, updateParticipant };
+module.exports = { 
+    createServer, 
+    getServerById, 
+    getUserServers, 
+    getUsers, 
+    updateParticipant,
+    updateServerName,
+    updateUserPermisions,
+    deleteServer, 
+};
