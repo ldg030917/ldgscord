@@ -43,7 +43,7 @@ function ChannelPage() {
     fetchServers();
     console.log("FETCHING!!!!!!!!!!!!!!!!!!!!");
     fetchChannels(serverId);
-  }, [serverId]);
+  }, [serverId, channelId]);
 
   return (
     <SocketIoProvider>
