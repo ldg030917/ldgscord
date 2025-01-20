@@ -2,6 +2,7 @@ const serverService = require('../services/serverService');
 const channelService = require('../services/channelService');
 const userService = require('../services/userService');
 
+/** 서버 생성 */
 const createServer = async (req, res) => {
     const user_id = req.user.id;
     const name = req.body.name;
@@ -56,6 +57,7 @@ const getUsers = async (req, res) => {
     }
 }
 
+/** 서버에 사용자 추가 */
 const joinUserToServer = async (req, res) => {
     const server_id = req.params.server_id;
     const user_id = req.user.id;
