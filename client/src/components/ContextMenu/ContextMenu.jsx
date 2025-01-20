@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import MenuButton from "../MenuButton.jsx/MenuButton";
 import './ContextMenu.css';
 
 function ContextMenu({ children, ParentRef }) {
@@ -6,19 +7,24 @@ function ContextMenu({ children, ParentRef }) {
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  const handleClickMenu = (e) => {
+    e.stopPropagation();
+    setShowContextMenu(false);
+  }
+  
+  const handleRightClickMenu = (e) => {
+    e.preventDefault();
+  }
+
   useEffect(() => {
-    // 메뉴 외부를 클릭했을 때 메뉴 닫기
-    const handleClickOutside = (e) => {
-      if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
-        setShowContextMenu(false); // 메뉴를 닫는 함수 호출
-        //console.log(`${children} : 꺼짐`);
-      }
+    const handleClick = (e) => {
+      setShowContextMenu(false);
     };
     
-    const handleRightClickOutside = (e) => {
-      e.preventDefault();
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (ParentRef.current && ParentRef.current.contains(e.target)) {
+    const handleRightClick = (e) => {
+      if (ParentRef.current && ParentRef.current.contains(e.target) && !contextMenuRef.current) {
+        e.preventDefault();
+        setPosition({ x: e.clientX, y: e.clientY });
         setShowContextMenu(true);
         //console.log(`${children} : 켜짐`);
       } else {
@@ -27,27 +33,32 @@ function ContextMenu({ children, ParentRef }) {
     }
 
     // 이벤트 리스너 추가
-    document.addEventListener('click', handleClickOutside);
-    document.addEventListener('contextmenu', handleRightClickOutside);
+    document.addEventListener('click', handleClick);
+    document.addEventListener('contextmenu', handleRightClick);
 
     // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('contextmenu', handleRightClickOutside);
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('contextmenu', handleRightClick);
     };
   }, []); // 빈 배열을 넣어 컴포넌트가 마운트될 때만 실행
 
   if (!showContextMenu) return null;
 
   return (
-    <ul className="context-menu" ref={contextMenuRef} style={{
+    <ul className="context-menu" onClick={handleClickMenu} onContextMenu={handleRightClickMenu} ref={contextMenuRef} style={{
       top: position.y,
       left: position.x,
     }}>
       <div>{children}</div>
-      <li style={{ padding: '8px', cursor: 'pointer' }}>메뉴 항목 1</li>
-      <li style={{ padding: '8px', cursor: 'pointer' }}>메뉴 항목 2</li>
-      <li style={{ padding: '8px', cursor: 'pointer' }}>메뉴 항목 3</li>
+      <MenuButton text={'읽음으로 표시하기'} />
+      <MenuButton text={'초대하기'} />
+      <MenuButton text={'서버 알림 끄기'} />
+      <MenuButton text={'알림 설정'} />
+      <MenuButton text={'서버 설정'} />
+      <MenuButton text={'서버 프로필 설정'} />
+      <MenuButton text={'채널 만들기'} />
+      <MenuButton text={'서버 나가기'} />
     </ul>
   );
 }
