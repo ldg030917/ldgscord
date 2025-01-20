@@ -7,7 +7,7 @@ function MessageBox({ data }) {
   const messageBoxRef = useRef(null);
   return (
     <div className='message-box' ref={messageBoxRef}>
-      <ContextMenu ParentRef={messageBoxRef} />
+      <ContextMenu ParentRef={messageBoxRef} children={data.content} />
       <div className='profile-img'>
         {data.user_id}
         <WIP></WIP>
