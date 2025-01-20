@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import MenuButton from "../MenuButton.jsx/MenuButton";
-import ServerInviteModal from "../Modal/ServerInviteModal";
 import Modal from "../Modal/Modal";
 import Input from "../Input/Input";
 import BasicButton from "../BasicButton/BasicButton";
 import { createChannel } from "../../services/api";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import ConfigPage from "../ConfigPage/ConfigPage";
 
 const Menu = styled.div`
   position: absolute;
@@ -33,22 +33,20 @@ const DivBar = styled.div`
 const ServerHeaderMenu = ({ showMenu, closeMenu }) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showConfig, setShowConfig] = useState(false);
 
   const handleInvite = (e) => {
-    e.stopPropagation();
     setShowInviteModal(true);
-    closeMenu();
     console.log('Invite!');
   };
 
   const handleSetting = (e) => {
     //e.stopPropagation();
-
+    setShowConfig(true);
   };
 
   const handleCreateChannel = () => {
     setShowCreateChannelModal(true);
-    closeMenu();
   };
 
   const handleServerProfile = () => {
@@ -58,17 +56,17 @@ const ServerHeaderMenu = ({ showMenu, closeMenu }) => {
   return (
     <>
       {showMenu &&
-      <Menu>
+      <Menu onClick={closeMenu}>
         <MenuButton text={'초대하기'} onClick={handleInvite} />
         <MenuButton text={'서버 설정'} onClick={handleSetting} />
         <MenuButton text={'채널 만들기'} onClick={handleCreateChannel}/>
         <DivBar/>
-        <MenuButton text={'알림 설정'}/>
+        <MenuButton text={'알림 설정'} onClick={(e) => e.stopPropagation()}/>
         <DivBar/>
         <MenuButton text={'서버 프로필 편집'} onClick={handleServerProfile}/>
       </Menu>
       }
-
+      <ConfigPage showPage={showConfig} closePage={() => setShowConfig(false)}/>
       <ServerInviteModal showModal={showInviteModal} closeModal={() => setShowInviteModal(false)}/>
       <CreateChannelModal showModal={showCreateChannelModal} closeModal={() => setShowCreateChannelModal(false)}/>
     </>
@@ -76,6 +74,24 @@ const ServerHeaderMenu = ({ showMenu, closeMenu }) => {
 }
 
 export default ServerHeaderMenu;
+
+const ServerInviteModal = ({ showModal, closeModal }) => {
+  const serverName = 'server.current.name';
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    closeModal();
+  }
+
+  return(
+    <Modal showModal={showModal} closeModal={closeModal}>
+      <p>{`친구를 ${serverName} 그룹으로 초대하기`}</p>
+      
+      <p>또는 친구에게 서버 초대 링크 전송하기</p>
+      
+    </Modal>
+  )
+};
 
 const CreateChannelModal = ({ showModal, closeModal }) => {
   const [channelName, setChannelName] = useState('');
@@ -87,8 +103,12 @@ const CreateChannelModal = ({ showModal, closeModal }) => {
     const data = {
       name: channelName,
     };
-    const res = await createChannel(data, serverId);
-    navigate(`/channels/${serverId}/${res.channel_id}`);
+    try {
+      const res = await createChannel(data, serverId);
+      navigate(`/channels/${serverId}/${res.channelId}`);
+    } catch (error) {
+      console.error(error);
+    }
     closeModal();
   }
 
@@ -105,4 +125,4 @@ const CreateChannelModal = ({ showModal, closeModal }) => {
       <BasicButton onClick={handleSubmit}>채널 만들기</BasicButton>
     </Modal>
   )
-}
+};
