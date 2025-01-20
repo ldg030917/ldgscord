@@ -1,5 +1,15 @@
 const channelService = require('../services/channelService');
 
+const createChannel = async (req, res) => {
+    const server_id = req.params.server_id;
+    const channel_name = req.body.name;
+    try {
+        const channel_id = await channelService.createChannel(channel_name, server_id);
+        res.status(200).json({ channelId: channel_id });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
 
 const getChannelMessages = async (req, res) => {
     const channel_id = req.params.channel_id;
@@ -25,4 +35,4 @@ const createMessage = async (req, res) => {
     }
 }
 
-module.exports = { getChannelMessages, createMessage };
+module.exports = { createChannel, getChannelMessages, createMessage };
