@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import './RoundButton.css';
 
-const RoundButton = ({ onClick, children, className, onContextMenu }) => {
+const RoundButton = forwardRef(({ onClick, children, className, onContextMenu }, ref) => {
   return (
-    <button className={`round-button ${className}`} onClick={onClick} onContextMenu={onContextMenu}>
+    <button ref={ref} className={`round-button ${className}`} onClick={onClick} onContextMenu={onContextMenu}>
       {children}
     </button>
   );
-};
+});
 
 export default RoundButton;
