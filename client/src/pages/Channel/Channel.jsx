@@ -9,6 +9,7 @@ import ChatBox from '../../components/ChatBox/ChatBox';
 import MessageList from '../../components/MessageList/MessageList';
 import { SocketIoProvider } from '../../services/socket';
 import WIP from '../../components/WIP';
+import ServerHeader from '../../components/ServerHeader/ServerHeader';
 import axios from 'axios';
 import './Channel.css';
 
@@ -52,7 +53,7 @@ function ChannelPage() {
         </div>
         <div className='sub-container2'>
           <div className='sub-container2-header'>
-
+            {showChannels ? <ServerHeader name={serverId}/> : <WIP size={'40'}/>}
           </div>
           <div className='sub-container2-body'>
             {showChannels ? <ChannelList serverId={serverId} channels={channels} /> : <>AAAAAAAAA</>}
