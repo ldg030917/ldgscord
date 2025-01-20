@@ -25,8 +25,16 @@ const setupSocket = (io) => {
         console.log("user connected");
 
         socket.on('SEND_MESSAGE', (data) => {
-            io.to(data.serverId).to(data.channelId).emit('SEND_MESSAGE', data);
-            console.log('SEND_MESSAGE : ', data);
+            const user_id = verifyToken(token).id;
+            const server_data = {
+                serverId: data.serverId,
+                channelId: data.channelId,
+                content: data.content,
+                user_id: user_id,
+                created_at: Date.now(),
+            }
+            io.to(data.serverId).to(data.channelId).emit('SEND_MESSAGE', server_data);
+            console.log('SEND_MESSAGE : ', server_data);
         });
 
         
