@@ -2,6 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useSocket } from "../../services/socket";
 import { getMessages } from "../../services/api";
 import MessageBox from "../MessageBox/MessageBox";
+import styled from "styled-components";
+
+const List = styled.div`
+  height: 90%;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;              /* 스크롤바의 너비 */
+    height: 8px;             /* 가로 스크롤바의 높이 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--bg-color-5); /* 스크롤바 핸들 색상 */
+    border-radius: 10px;     /* 핸들의 둥근 모서리 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--bg-color-2); /* 스크롤바의 배경 색상 */
+    border-radius: 10px;                 /* 트랙의 둥근 모서리 */
+  }
+`;
 
 function MessageList({ channelId }) {
   const socket = useSocket();
@@ -29,12 +50,12 @@ function MessageList({ channelId }) {
   }, [channelId]);
 
   return(
-    <div className="message-list">
+    <List>
       {messageList.map((data, idx) => (
         <MessageBox key={idx} data={data} />
       ))}
 
-    </div>
+    </List>
   )
 };
 
