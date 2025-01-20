@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSocket } from "../../services/socket";
 import { FaDiscord } from "react-icons/fa";
 import { createMessage } from "../../services/api";
@@ -9,9 +9,7 @@ function ChatBox() {
   const socket = useSocket();
   const [content, setContent] = useState('');
   const textareaRef = useRef(null);
-  const location = useLocation();
-  const splitUrl = location.pathname.split('/');
-  //console.log(splitUrl);
+  const { serverId, channelId } = useParams();
 
   const adjustHeight = () => {
     const textarea = textareaRef.current;
@@ -39,12 +37,12 @@ function ChatBox() {
   const handleSubmit = () => {
     // 폼 제출 처리 (예: API 호출, 콘솔 출력 등)
     socket.emit('SEND_MESSAGE', { 
-        serverId: splitUrl[2],
-        channelId: splitUrl[3], 
+        serverId: serverId,
+        channelId: channelId, 
         content: content
       }
     );
-    createMessage({ content: content }, splitUrl[3]);
+    createMessage({ content: content }, channelId);
     console.log('폼 제출:', content);
     setContent(''); // 메시지 초기화 (옵션)
   };
