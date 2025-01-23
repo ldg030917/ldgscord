@@ -3,6 +3,7 @@ import { useSocket } from "../../services/socket";
 import { getMessages } from "../../services/api";
 import MessageBox from "../MessageBox/MessageBox";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 
 const List = styled.div`
   height: 90%;
@@ -24,7 +25,8 @@ const List = styled.div`
   }
 `;
 
-function MessageList({ channelId }) {
+function MessageList() {
+  const { channelId } = useParams();
   const socket = useSocket();
   const [messageList, setMessageList] = useState([]);
 
