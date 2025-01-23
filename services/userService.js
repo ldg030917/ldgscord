@@ -1,5 +1,6 @@
 //사용자 처리에 대한 비즈니스 로직
 const userModel = require('../models/User');
+const friendModel = require('../models/Friend');
 const bcrypt = require('bcrypt');
 const { generateToken, verifyToken } = require('../utils/jwt');
 
