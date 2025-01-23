@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ServerList from '../../components/ServerList/ServerList';
 import ChannelList from '../../components/ChannelList/ChannelList';
+import FriendList from '../../components/FriendList/FriendList';
 import { getServers, getChannels } from '../../services/api';
 import ChatBox from '../../components/ChatBox/ChatBox';
 import MessageList from '../../components/MessageList/MessageList';
@@ -12,12 +13,15 @@ import WIP from '../../components/WIP';
 import ServerHeader from '../../components/ServerHeader/ServerHeader';
 import axios from 'axios';
 import './Channel.css';
+import FriendHeader from './ChannelComponents/SubHeader3';
+import SubHeader3 from './ChannelComponents/SubHeader3';
 
 function ChannelPage() {
   const { serverId, channelId } = useParams();
 
   const [servers, setServers] = useState([]);
   const [channels, setChannels] = useState([]);
+  const [isChatting, setIsChatting] = useState(false);
   const [showChannels, setShowChannels] = useState(false);
   
   const fetchServers = async () => {
@@ -56,15 +60,14 @@ function ChannelPage() {
             {showChannels ? <ServerHeader name={serverId}/> : <WIP size={'40'}/>}
           </div>
           <div className='sub-container2-body'>
-            {showChannels ? <ChannelList serverId={serverId} channels={channels} /> : <>AAAAAAAAA</>}
+            {showChannels ? <ChannelList serverId={serverId} channels={channels} /> : <FriendList />}
           </div>
           <div className='sub-container2-profile'>
             <WIP size={'40'}/>
           </div>
         </div>
         <div className='sub-container3'>
-          <div className='sub-container3-header'>
-          </div>
+          <SubHeader3 isChatting={isChatting} />
           <div className='sub-container3-body'>
             <MessageList channelId={channelId} />
             <ChatBox />
