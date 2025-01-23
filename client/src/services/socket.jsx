@@ -6,9 +6,12 @@ const SocketIoContext = createContext();
 export const SocketIoProvider = ({ children }) => {
   const socket = useRef(null);
   const token = localStorage.getItem('token');
+  const Url = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000'
+  : 'http://3.25.29.33:5000';
 
   useEffect(() => {
-    socket.current = io('http://localhost:5000', {
+    socket.current = io(Url, {
       auth: {
         token
       }
