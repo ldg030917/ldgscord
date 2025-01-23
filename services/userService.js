@@ -21,6 +21,7 @@ const registerUser = async (id, password, nickname, email) => {
 const loginUser = async (id, password) => {
     try {
         const user = await userModel.getUserById(id);
+        console.log(`p:${password} up:${user.password}`);
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
             console.log("login success");
