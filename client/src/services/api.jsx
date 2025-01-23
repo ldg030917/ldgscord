@@ -69,6 +69,15 @@ export const getMessages = async (channelId) => {
   }
 };
 
+export const getFriends = async () => {
+  try {
+    const response = await axiosAuthApi.get(`/friends`);
+    return response.data.friends;
+  } catch (error) {
+    return;
+  }
+}
+
 /** 로그인 성공 시 response, 실패 시 error 반환 */
 export const login = async (data) => {
   try{

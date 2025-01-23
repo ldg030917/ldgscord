@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getFriends } from "../../services/api";
 import BasicButton from "../BasicButton/BasicButton";
+import { useNavigate } from "react-router-dom";
 
 const FriendList = () => {
   const [friends, setFriends] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('ff:', friends);
@@ -17,6 +19,10 @@ const FriendList = () => {
     console.log('Is array:', Array.isArray(friends));
   }, []);
   
+  const handleClick = (channelId) => {
+    navigate(`/channels/@me/${channelId}`);
+  };
+
   return (
     <>
       <p>친구 목록</p>

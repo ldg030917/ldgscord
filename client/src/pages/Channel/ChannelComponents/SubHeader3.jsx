@@ -43,43 +43,47 @@ const SubHeader3 = () => {
   return (
     <Box>
       {serverId ==='@me' && channelId == null && <>
-      <Profile>{'친구'}</Profile>
-      <StyledButton 
-        index={1}
-        $active={activeIndex === 1}
-        onClick={()=>handleClick(1)}
-      >
-          온라인
-      </StyledButton>
-      <StyledButton 
-        index={2}
-        $active={activeIndex === 2}
-        onClick={()=>handleClick(2)}
-      >
-          모두
-      </StyledButton>
-      <StyledButton
-        index={3}
-        $active={activeIndex === 3}
-        onClick={()=>handleClick(3)}
-      >
-          대기 중
-      </StyledButton>
-      <StyledButton
-        index={4}
-        $active={activeIndex === 4}
-        onClick={()=>handleClick(4)}
-      >
-          차단 목록
-      </StyledButton>
-      <StyledButton
-        index={5}
-        $active={activeIndex === 5}
-        $color={'#0c800c'}
-        onClick={()=>handleClick(5)}
-      >
-          친구 추가하기
-      </StyledButton></>}
+        <Profile>{'친구'}</Profile>
+        <StyledButton 
+          index={1}
+          $active={activeIndex === 1}
+          onClick={()=>handleClick(1)}
+        >
+            온라인
+        </StyledButton>
+        <StyledButton 
+          index={2}
+          $active={activeIndex === 2}
+          onClick={()=>handleClick(2)}
+        >
+            모두
+        </StyledButton>
+        <StyledButton
+          index={3}
+          $active={activeIndex === 3}
+          onClick={()=>handleClick(3)}
+        >
+            대기 중
+        </StyledButton>
+        <StyledButton
+          index={4}
+          $active={activeIndex === 4}
+          onClick={()=>handleClick(4)}
+        >
+            차단 목록
+        </StyledButton>
+        <StyledButton
+          index={5}
+          $active={activeIndex === 5}
+          $color={'#0c800c'}
+          onClick={()=>handleClick(5)}
+        >
+            친구 추가하기
+        </StyledButton>
+      </>}
+      {serverId !== '@me' && channelId && <>
+        <>{`#${channelId}`}</>
+      </>}
     </Box>
   );
 };
