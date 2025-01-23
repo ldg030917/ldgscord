@@ -20,6 +20,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+    console.log("Request Body:", req.body);
     const id = req.body.id;
     const password = req.body.password;
     try {
