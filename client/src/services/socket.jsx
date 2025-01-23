@@ -11,6 +11,7 @@ export const SocketIoProvider = ({ children }) => {
   : 'http://3.25.29.33:5000';
 
   useEffect(() => {
+    console.log(Url);
     socket.current = io(Url, {
       auth: {
         token
