@@ -1,16 +1,18 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:5000'
+const apiUrl = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000'
+  : 'http://3.25.29.33:5000';
 
 const axiosApi = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: `${apiUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 const axiosAuthApi = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: `${apiUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
