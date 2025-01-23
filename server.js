@@ -14,10 +14,10 @@ const userRouter = require('./routes/userRoutes');
 
 //server, io, app 설정
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer(app)
 
 const corsOptions = {
-    origin: 'http://3.25.29.33:5000',
+    origin: 'http://localhost:3000',
     credentials: true,
 }
 app.use(cors(corsOptions));
@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public', 'build')));
 
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', authRouter);
 app.use('/api', authToken, serverRouter);
