@@ -20,13 +20,14 @@ const corsOptions = {
     origin: 'http://localhost:3000',
     credentials: true,
 }
-
 app.use(cors(corsOptions));
 
 const io = socketIo(server, {cors: corsOptions});
 setupSocket(io);
 
 app.use(express.static(path.join(__dirname, 'client', 'build')));
+
+
 
 app.use(express.json());
 
@@ -35,6 +36,10 @@ app.use('/api', authToken, serverRouter);
 app.use('/api', authToken, channelRouter);
 app.use('/api', authToken, userRouter);
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+  
 server.listen(5000,  () => {
     console.log("start server at port 5000");
 });
