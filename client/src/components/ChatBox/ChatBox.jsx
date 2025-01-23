@@ -52,20 +52,22 @@ function ChatBox() {
   }, [content]);
   
   return(
-    <form className="chat-box" onSubmit={(e) => e.preventDefault()}>
-      <button className="chat-icon-button"><FaDiscord size={24} /></button>
-      <textarea 
-        ref={textareaRef}
-        className="chat-input"
-        value={content}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        rows="1" 
-        autoComplete="off" 
-        spellCheck="false"
-      />
-      <button style={{ display: 'none' }} type="submit" onClick={handleSubmit}/>
-    </form>
+    <>
+      {channelId != null && <form className="chat-box" onSubmit={(e) => e.preventDefault()}>
+        <button className="chat-icon-button"><FaDiscord size={24} /></button>
+        <textarea 
+          ref={textareaRef}
+          className="chat-input"
+          value={content}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          rows="1" 
+          autoComplete="off" 
+          spellCheck="false"
+        />
+        <button style={{ display: 'none' }} type="submit" onClick={handleSubmit}/>
+      </form>}
+    </>
   )
 }
 
