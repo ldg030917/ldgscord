@@ -7,9 +7,10 @@ const { setupSocket } = require('./utils/socket');
 const { authToken } = require('./utils/jwt');
 
 //Routes
-const userRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRoutes');
 const serverRouter = require('./routes/serverRoutes');
 const channelRouter = require('./routes/channelRoutes');
+const userRouter = require('./routes/userRoutes');
 
 //server, io, app 설정
 const app = express();
@@ -29,9 +30,10 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use(express.json());
 
-app.use('/api', userRouter);
+app.use('/api', authRouter);
 app.use('/api', authToken, serverRouter);
 app.use('/api', authToken, channelRouter);
+app.use('/api', authToken, userRouter);
 
 server.listen(5000,  () => {
     console.log("start server at port 5000");
