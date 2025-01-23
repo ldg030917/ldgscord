@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 const io = socketIo(server, {cors: corsOptions});
 setupSocket(io);
 
-app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, 'public', 'build')));
 
 
 
@@ -37,9 +37,9 @@ app.use('/api', authToken, channelRouter);
 app.use('/api', authToken, userRouter);
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public/build', 'index.html'));
   });
-  
+
 server.listen(5000,  () => {
     console.log("start server at port 5000");
 });
