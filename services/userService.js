@@ -30,7 +30,7 @@ const loginUser = async (id, password) => {
             throw new Error('EEEE');
         }
     } catch (error) {
-        console.error("err");
+        console.error(error);
         throw error;
     }
 };
